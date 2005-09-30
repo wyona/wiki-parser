@@ -1,7 +1,8 @@
 
+package org.wyona.wiki;
+
 import java.io.FileInputStream;
 import org.apache.log4j.Category;
-import org.wyona.wiki.WikiParser;
 
 public class Wiki2XML {
 

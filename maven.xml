@@ -27,10 +27,10 @@
   <goal name="wikiparser:jar">
     <attainGoal name="wikiparser:compile"/>
     <mkdir dir="${lib.dir}"/>
-    <jar destfile="${lib.dir}/WikiParser.jar" basedir="${classes.dir}" update="true">
+    <jar destfile="${lib.dir}/WikiParser.jar" basedir="${classes.dir}" update="false">
       <manifest>
         <attribute name="class-path" value="${classpath.jar}"/>
-        <attribute name="main-class" value="Wiki2XML"/>
+        <attribute name="main-class" value="org.wyona.wiki.Wiki2XML"/>
       </manifest>
     </jar>
   </goal>
