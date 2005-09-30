@@ -11,9 +11,13 @@
     <attainGoal name="wikiparser:generate"/>		
     <echo>Compiling the WikiParser</echo>
     <mkdir dir="${classes.dir}"/>
+    <echo>Compiling Generated Java Classes</echo>
+    <ant:javac srcDir="target/generated-src/main/java" destDir="${classes.dir}" 
+      classpathref="maven.dependency.classpath"/>
+    <echo>Compiling Java Classes</echo>
     <ant:javac srcDir="${wikiparser.src.dir}" destDir="${classes.dir}" 
-       classpathref="maven.dependency.classpath"
-       debug="true"/>
+      classpathref="maven.dependency.classpath"/>
+    <attainGoal name="wikiparser:test"/>  
   </goal>	  
 
   <goal name="wikiparser:generate">
@@ -37,11 +41,15 @@
 
   <goal name="wikiparser:clean">
     <ant:delete dir="target"/>
-    <ant:delete dir="build"/> 
+    <ant:delete dir="build"/>
+    <ant:delete dir="bin"/> 
   </goal> 
-  
-  <goal name="wikiparser:test">
 
+  <goal name="wikiparser:test">
+    <ant:exec executable="test/run-tests.sh"/>
   </goal>
   
+  <goal name="wikiparser:generate-tests">
+    <ant:exec executable="text/generate-tests.sh"/>
+  </goal>
 </project>
