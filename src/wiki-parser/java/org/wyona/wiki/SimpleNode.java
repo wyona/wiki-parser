@@ -10,7 +10,6 @@ public class SimpleNode implements Node {
   protected int id;
   protected WikiParser parser;
   
-  public ArrayList options = new ArrayList(2);
   public HashMap optionMap = new HashMap();
   public int type;
   public String image;
