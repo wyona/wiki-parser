@@ -81,9 +81,7 @@ public class WikiParser {
     /**
     * This method generates XML output.
     */
-    public static void traverseXML(SimpleNode node, int depth) {
-    	
-    	
+    public static void traverseXML(SimpleNode node, int depth) {    	    	
     	SimpleNode n = node;
 		
 		// display once header!
@@ -91,39 +89,29 @@ public class WikiParser {
 			System.out.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
 			show = false;
 		}
-		
-		
+				
     	for (int i=0; i<depth; i++)
-  			System.out.print(" ");
-  			
-  			if (n.jjtGetNumChildren() > 0) {
-  			System.out.print("<" + n.toString() + ">");
-  			}
-  			else {
-  				System.out.print("<" + n.toString() + " value = ");
-  			}
-  			
-  			if (!node.optionMap.isEmpty()) {
-            Set keySet = node.optionMap.keySet();
-            Iterator kit = keySet.iterator();
-            	while (kit.hasNext()) {
-                	Object option = kit.next();
-	                Object value = node.optionMap.get(option);
-	                System.out.print("\"" + value.toString()+ "\"" + "/>");
-    	        }
+  			System.out.print(" ");    	
+    	System.out.print("<" + n.toString());  		
+  		if (!node.optionMap.isEmpty()) {
+    	    Set keySet = node.optionMap.keySet();
+         	Iterator kit = keySet.iterator();
+            while (kit.hasNext()) {
+               	Object option = kit.next();
+	            Object value = node.optionMap.get(option);
+				System.out.print(" " + option.toString() + "=" + "\"" + value.toString() + "\"");
     		}
-  		
-  		System.out.println();
-        if (n.jjtGetNumChildren() > 0) {
-
-            for (int i = 0; i < n.jjtGetNumChildren(); i++) {
-                traverseXML((SimpleNode)node.jjtGetChild(i), depth + 1);
-            }         
+    	}  		
+    	if (n.jjtGetNumChildren() > 0) {
+    		System.out.println(">"); 
+            for (int i = 0; i < n.jjtGetNumChildren(); i++) 
+                traverseXML((SimpleNode)node.jjtGetChild(i), depth + 1);              			
            	for (int i=0; i<depth; i++)
-  			System.out.print(" ");
-  			
-			System.out.print("</" + n.toString() + ">" +"\n");
-        }
+	  			System.out.print(" ");    	
+	    	System.out.println("</" + n.toString() + ">");
+        } else {
+        	System.out.println("/>"); 
+    	}
     }
 }
 
@@ -210,6 +198,19 @@ TOKEN: {
 
 <DEFAULT> 
 TOKEN: {
+	<LINK: "["> : IN_LINK
+}
+
+<IN_LINK>
+TOKEN: {
+	<LINK_EOL: "\r" | "\r\n" | "\n"> : DEFAULT
+|	<LINK_END: "]">
+|	<LINK_SEPARATOR: "|">
+|	<LINK_ANY_CHAR: ~[]>
+}
+
+<DEFAULT> 
+TOKEN: {
 	<START_PLAIN: "{{"> : IN_PLAIN
 }
 
@@ -269,6 +270,7 @@ void Paragraph() : {}
 		Title()			|
 		List()			|
 		Hrule()			|
+		Link()			|
 		Table()
 	)+
 }
@@ -333,6 +335,42 @@ void Underline() : {}
 	)
 }
 
+/** Link */
+
+void Link() : 
+{
+	String textStr = null;
+	String linkStr = "";	
+}
+{
+	<LINK> 
+	(
+		LOOKAHEAD(2)
+		textStr = Text()
+		{
+			linkStr += textStr;
+		}
+	)+ 
+	{ 
+		jjtThis.setOption("value", linkStr);
+	}
+	[ 
+		LinkLabel()
+	] 
+	<LINK_END>
+	<LINK_EOL>
+}
+
+void LinkLabel() : {}
+{
+	<LINK_SEPARATOR> 
+	(
+		LOOKAHEAD(2)
+		Text()
+	)+	
+}
+
+
 /** Table */
 
 void Table() : {}
@@ -396,22 +434,36 @@ void List() :
 
 /** Plaintext */
 
-void Plain() : {}
+void Plain() : 
+{
+	Token t;
+	String textStr = null;
+	String plainStr = "";	
+}
 {
 	<START_PLAIN> 
 	(
 		LOOKAHEAD(2) 
-		PlainText()
+		textStr = PlainText()
+		{
+			plainStr += textStr;	
+		}
 	)* 
+	{ 
+		jjtThis.setOption("value", plainStr);
+	}
 	<END_PLAIN>	
 }
 
-void PlainText() : 
+String PlainText() : 
 {
-	Token t;
+	Token t;	
 }
 {
 	t = <PLAIN_ANY_CHAR>	{ jjtThis.setOption("value", t.image); } 		
+	{
+		return t.image;	
+	}
 }
 
 /** Horizontal Rule */
@@ -440,16 +492,22 @@ void Title() : {}
 
 /** State spanning actions */
 
-void Text() : 
+String Text() : 
 {
 	Token t;
 }
 {
-	t = <NOTAGS_ANY_CHAR>	{ jjtThis.setOption("value", t.image); } |
-	t = <LIST_ANY_CHAR>		{ jjtThis.setOption("value", t.image); } | 
-	t = <TITLE_ANY_CHAR>	{ jjtThis.setOption("value", t.image); } | 
-	t = <TABLE_ANY_CHAR>	{ jjtThis.setOption("value", t.image); } |
-	t = <ANY_CHAR>			{ jjtThis.setOption("value", t.image); } 		
+	(
+		t = <NOTAGS_ANY_CHAR>	{ jjtThis.setOption("value", t.image); } |
+		t = <LIST_ANY_CHAR>		{ jjtThis.setOption("value", t.image); } | 
+		t = <TITLE_ANY_CHAR>	{ jjtThis.setOption("value", t.image); } | 
+		t = <TABLE_ANY_CHAR>	{ jjtThis.setOption("value", t.image); } |
+		t = <LINK_ANY_CHAR>		{ jjtThis.setOption("value", t.image); } |	
+		t = <ANY_CHAR>			{ jjtThis.setOption("value", t.image); } 		
+	)
+	{ 
+		return t.image; 
+	}
 }
 
 void ForceNewline() : {}
