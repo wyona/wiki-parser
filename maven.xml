@@ -17,7 +17,6 @@
     <echo>Compiling Java Classes</echo>
     <ant:javac srcDir="${wikiparser.src.dir}" destDir="${classes.dir}" 
       classpathref="maven.dependency.classpath"/>
-    <attainGoal name="wikiparser:test"/>  
   </goal>	  
 
   <goal name="wikiparser:generate">
@@ -37,6 +36,7 @@
         <attribute name="main-class" value="org.wyona.wiki.Wiki2XML"/>
       </manifest>
     </jar>
+    <attainGoal name="wikiparser:test"/>
   </goal>
 
   <goal name="wikiparser:clean">
