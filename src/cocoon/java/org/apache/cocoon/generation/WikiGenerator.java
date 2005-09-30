@@ -25,9 +25,12 @@ import java.util.Set;
 import org.apache.avalon.framework.parameters.ParameterException;
 import org.apache.avalon.framework.parameters.Parameters;
 import org.apache.cocoon.ProcessingException;
+import org.apache.cocoon.components.source.SourceUtil;
 import org.apache.cocoon.environment.ObjectModelHelper;
 import org.apache.cocoon.environment.Request;
 import org.apache.cocoon.environment.SourceResolver;
+import org.apache.excalibur.source.Source;
+import org.apache.excalibur.source.SourceException;
 import org.apache.lenya.cms.publication.Document;
 import org.apache.lenya.cms.publication.DocumentIdentityMap;
 import org.apache.lenya.cms.publication.Publication;
@@ -54,18 +57,11 @@ public class WikiGenerator extends ServiceableGenerator {
 
     protected static final String WIKI_NODE_NAME = "wiki";
 
-    /** Markup or XML */
-    protected String markupOnly;
-
-    /** The Document containing Wiki-Markup */
-    protected String docId;
-
-    /** The Lenya-Area */
-    protected String area;
-
     /** The static parser slave */
     WikiParser wikiParser = null;
-
+    
+    protected Source inputSource = null;
+    
     /**
      * Convenience object, so we don't need to create an AttributesImpl for every element.
      */
@@ -86,18 +82,11 @@ public class WikiGenerator extends ServiceableGenerator {
     public void setup(SourceResolver resolver, Map objectModel, String src, Parameters par) throws ProcessingException,
             SAXException, IOException {
         super.setup(resolver, objectModel, src, par);
-
         try {
-            this.docId = par.getParameter("docId");
-            this.area = par.getParameter("area");
-        } catch (ParameterException e) {
-            throw new ProcessingException(e);
+            this.inputSource = super.resolver.resolveURI(src);
+        } catch (SourceException se) {
+            throw SourceUtil.handle("Error during resolving of '" + src + "'.", se);
         }
-
-        if (docId == null || area == null) {
-            throw new ProcessingException("parameter docId or area missing");
-        }
-
         this.attributes = new AttributesImpl();
     }
 
@@ -108,45 +97,31 @@ public class WikiGenerator extends ServiceableGenerator {
      *             if an error occurs while outputting the document
      */
     public void generate() throws SAXException, ProcessingException {
-
-        this.contentHandler.startDocument();
-        this.contentHandler.startPrefixMapping(PREFIX, URI);
         attributes.clear();
-
+        this.contentHandler.startDocument();
+        this.contentHandler.startPrefixMapping(PREFIX, URI);        
         this.contentHandler.startElement(URI, WIKI_NODE_NAME, PREFIX + ':' + WIKI_NODE_NAME, attributes);
 
-        try {
-            Request request = ObjectModelHelper.getRequest(this.objectModel);
-            markupOnly = request.getParameter("markup");
-            Session session = RepositoryUtil.getSession(request, this.getLogger());
-            DocumentIdentityMap map = new DocumentIdentityMap(session, this.manager, this.getLogger());
-            Publication publication = PublicationUtil.getPublication(this.manager, request);
-            Document wikiDocument = map.get(publication, area, docId, publication.getDefaultLanguage());
-
-            if (!wikiDocument.exists()) {
-                throw new ProcessingException("Document with docId: " + docId + " does not exist");
-            }
-
-            InputStream wikiIs = wikiDocument.getRepositoryNode().getInputStream();
-
-            if (wikiParser == null)
+        try {                        
+            InputStream wikiIs = inputSource.getInputStream();
+           
+            if (wikiParser == null) {
                 wikiParser = new WikiParser(wikiIs);
-            else
+            } else {
                 wikiParser.ReInit(wikiIs);
-
+            }
+            
             try {
                 SimpleNode root = wikiParser.WikiBody();
                 handleNode(root, 0);
             } catch (ParseException pe) {
                 throw new ProcessingException(pe.getMessage());
             }
-
         } catch (Exception e) {
             throw new ProcessingException(e);
         }
 
         this.contentHandler.endElement(URI, WIKI_NODE_NAME, PREFIX + ':' + WIKI_NODE_NAME);
-
         this.contentHandler.endPrefixMapping(PREFIX);
         this.contentHandler.endDocument();
     }
