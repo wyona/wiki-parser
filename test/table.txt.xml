@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WikiBody>
+ <Paragraph>
+  <Table>
+   <TableRow>
+    <TableCol>
+     <Text value="c"/>
+     <Text value="o"/>
+     <Text value="l"/>
+     <Text value="A"/>
+     <Text value="-"/>
+     <Text value="r"/>
+     <Text value="o"/>
+     <Text value="w"/>
+     <Text value="1"/>
+    </TableCol>
+    <TableCol>
+     <Text value="c"/>
+     <Text value="o"/>
+     <Text value="l"/>
+     <Text value="B"/>
+     <Text value="-"/>
+     <Text value="r"/>
+     <Text value="o"/>
+     <Text value="w"/>
+     <Text value="1"/>
+    </TableCol>
+    <TableCol>
+     <Text value="c"/>
+     <Text value="o"/>
+     <Text value="l"/>
+     <Text value="C"/>
+     <Text value="-"/>
+     <Text value="r"/>
+     <Text value="o"/>
+     <Text value="w"/>
+     <Text value="1"/>
+    </TableCol>
+   </TableRow>
+   <TableRow>
+    <TableCol>
+     <Text value="c"/>
+     <Text value="o"/>
+     <Text value="l"/>
+     <Text value="A"/>
+     <Text value="-"/>
+     <Text value="r"/>
+     <Text value="o"/>
+     <Text value="w"/>
+     <Text value="2"/>
+    </TableCol>
+    <TableCol>
+     <Text value="c"/>
+     <Text value="o"/>
+     <Text value="l"/>
+     <Text value="B"/>
+     <Text value="-"/>
+     <Text value="r"/>
+     <Text value="o"/>
+     <Text value="w"/>
+     <Text value="2"/>
+    </TableCol>
+    <TableCol>
+     <Text value="c"/>
+     <Text value="o"/>
+     <Text value="l"/>
+     <Text value="C"/>
+     <Text value="-"/>
+     <Text value="r"/>
+     <Text value="o"/>
+     <Text value="w"/>
+     <Text value="2"/>
+    </TableCol>
+    <TableCol>
+     <Text value="c"/>
+     <Text value="o"/>
+     <Text value="l"/>
+     <Text value="D"/>
+     <Text value="-"/>
+     <Text value="r"/>
+     <Text value="o"/>
+     <Text value="w"/>
+     <Text value="2"/>
+    </TableCol>
+   </TableRow>
+   <TableRow>
+    <TableCol>
+     <Text value="c"/>
+     <Text value="o"/>
+     <Text value="l"/>
+     <Text value="A"/>
+     <Text value="-"/>
+     <Text value="r"/>
+     <Text value="o"/>
+     <Text value="w"/>
+     <Text value="3"/>
+    </TableCol>
+    <TableCol>
+     <Text value="c"/>
+     <Text value="o"/>
+     <Text value="l"/>
+     <Text value="B"/>
+     <Text value="-"/>
+     <Text value="r"/>
+     <Text value="o"/>
+     <Text value="w"/>
+     <Text value="3"/>
+    </TableCol>
+   </TableRow>
+   <TableRow>
+    <TableCol>
+     <Text value="c"/>
+     <Text value="o"/>
+     <Text value="l"/>
+     <Text value="A"/>
+     <Text value="-"/>
+     <Text value="r"/>
+     <Text value="o"/>
+     <Text value="w"/>
+     <Text value="4"/>
+     <Bold>
+      <Text value="w"/>
+      <Text value="i"/>
+      <Text value="t"/>
+      <Text value="h"/>
+      <Text value=" "/>
+      <Text value="b"/>
+      <Text value="o"/>
+      <Text value="l"/>
+      <Text value="d"/>
+     </Bold>
+    </TableCol>
+    <TableCol>
+     <Text value="c"/>
+     <Text value="o"/>
+     <Text value="l"/>
+     <Text value="B"/>
+     <Text value="-"/>
+     <Text value="r"/>
+     <Text value="o"/>
+     <Text value="w"/>
+     <Text value="4"/>
+     <Text value="-"/>
+     <Italic>
+      <Text value="w"/>
+      <Text value="i"/>
+      <Text value="t"/>
+      <Text value="h"/>
+      <Text value=" "/>
+      <Text value="i"/>
+      <Text value="t"/>
+      <Text value="a"/>
+      <Text value="l"/>
+      <Text value="i"/>
+      <Text value="c"/>
+     </Italic>
+    </TableCol>
+   </TableRow>
+  </Table>
+ </Paragraph>
+</WikiBody>
