@@ -36,7 +36,6 @@
         <attribute name="main-class" value="org.wyona.wiki.Wiki2XML"/>
       </manifest>
     </jar>
-    <attainGoal name="wikiparser:test"/>
   </goal>
 
   <goal name="wikiparser:clean">
