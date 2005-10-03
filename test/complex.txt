@@ -1,6 +1,6 @@
 ! test wiki document
 
-wiki // wiki --- wiki // __ this '' is ^^ a test ^^'' wiki __
+wiki \\ wiki --- wiki \\ __ this '' is ^^ a test ^^'' wiki __
 
 __bold__
 ''italic''
@@ -12,9 +12,12 @@ __bold__
 
 ! again
 
+!! bigger title
+!!! big title
+
 * list
 ** list
-********** deeeeep list __yes__ // ''wiki''
+********** deeeeep list __yes__ // ''wiki''********** deeeeep list __yes__ \\ ''wiki''
 * flat
 
 [ link | label ]
