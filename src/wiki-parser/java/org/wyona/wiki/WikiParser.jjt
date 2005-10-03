@@ -106,7 +106,7 @@ public class WikiParser {
     		System.out.println(">"); 
             for (int i = 0; i < n.jjtGetNumChildren(); i++) 
                 traverseXML((SimpleNode)node.jjtGetChild(i), depth + 1);              			
-           	for (int i=0; i<depth; i++)
+           	for (int i = 0; i < depth; i++)
 	  			System.out.print(" ");    	
 	    	System.out.println("</" + n.toString() + ">");
         } else {
@@ -186,6 +186,17 @@ TOKEN: {
 	<TITLE: "!"> : IN_TITLE
 }
 
+<DEFAULT> 
+TOKEN: {
+	<MAINTITLE: "!!"> : IN_TITLE
+}
+
+<DEFAULT> 
+TOKEN: {
+	<MAINMAINTITLE: "!!!"> : IN_TITLE
+}
+
+
 <IN_TITLE>
 TOKEN: {
 	<TITLE_EOL: "\r" | "\r\n" | "\n"> : DEFAULT
@@ -222,7 +233,7 @@ TOKEN: {
 
 <DEFAULT> 
 TOKEN: {
-	<FORCE_NEWLINE: "//">
+	<FORCE_NEWLINE: "\\\\">
 }
 
 <DEFAULT>
@@ -268,6 +279,8 @@ void Paragraph() : {}
 		Underline() 	| 
 		ForceNewline()	| 
 		Title()			|
+		MainTitle()		|
+		MainMainTitle()	|
 		List()			|
 		Hrule()			|
 		Link()			|
@@ -473,11 +486,39 @@ void Hrule() : {}
 	<HRULE>	
 }
 
-/** Title */
+/** Titles (Main, MainMain and Title */
 
 void Title() : {}
 {
 	<TITLE> 
+	(
+		LOOKAHEAD(2)
+		Text()			|
+		ForceNewline()	| 
+		Bold()			| 
+		Italic()		| 
+		Underline()
+	)+
+	<TITLE_EOL>
+}
+
+void MainTitle() : {}
+{
+	<MAINTITLE> 
+	(
+		LOOKAHEAD(2)
+		Text()			|
+		ForceNewline()	| 
+		Bold()			| 
+		Italic()		| 
+		Underline()
+	)+
+	<TITLE_EOL>
+}
+
+void MainMainTitle() : {}
+{
+	<MAINMAINTITLE> 
 	(
 		LOOKAHEAD(2)
 		Text()			|
