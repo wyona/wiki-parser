@@ -2,11 +2,9 @@
 package org.wyona.wiki;
 
 import java.io.FileInputStream;
-import org.apache.log4j.Category;
 
 public class Wiki2XML {
 
-    static Category log = Category.getInstance(Wiki2XML.class);
     
     /**
      * Class that takes wiki syntax input from a file
@@ -25,13 +23,16 @@ public class Wiki2XML {
             catch (Exception e)
             {
                 System.err.println("File input error");
-                log.error(e);
                 throw new IllegalStateException(
                         "An unrecoverable error occured, see logfiles for details: " + e);          
             }
         }
-        else
-            System.out.println("Invalid parameters");
+        else {
+            if (args.length == 0) {
+                System.out.println("No file specified");
+            }
+        }
     }
 }
+
     
