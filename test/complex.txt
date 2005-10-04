@@ -17,11 +17,11 @@ __bold__
 
 * list
 ** list
-<<<<<<< .mine
+
 ********** deeeeep list __yes__ \\ ''wiki'' 
 =======
 ********** deeeeep list __yes__ \\ ''wiki''
->>>>>>> .r5820
+
 * flat
 
 [ link | label ]
