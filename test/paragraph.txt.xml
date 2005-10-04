@@ -32,7 +32,8 @@
   <Text value="a"/>
   <Text value="a"/>
   <Text value="a"/>
-  <ForceNewline/>
+  <Text value="/"/>
+  <Text value="/"/>
   <Text value="b"/>
   <Text value="b"/>
   <Text value="b"/>
