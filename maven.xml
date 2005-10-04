@@ -32,6 +32,7 @@
     <mkdir dir="${lib.dir}"/>
     <jar destfile="${lib.dir}/WikiParser.jar" basedir="${classes.dir}" update="false">
       <manifest>
+        <!-- TODO: Windows seems to have a problem with the class-path within the MANIFEST! -->
         <attribute name="class-path" value="${classpath.jar}"/>
         <attribute name="main-class" value="org.wyona.wiki.Wiki2XML"/>
       </manifest>
