@@ -1,4 +1,3 @@
-
 package org.wyona.wiki;
 
 import java.io.FileInputStream;
