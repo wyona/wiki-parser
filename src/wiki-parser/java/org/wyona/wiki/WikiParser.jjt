@@ -167,13 +167,19 @@ TOKEN: {
 
 <DEFAULT>
 TOKEN: {
-	<LIST: "*"> : IN_LIST
+	<BLIST: "*"> : IN_LIST
+}
+
+<DEFAULT>
+TOKEN: {
+	<NLIST: "#"> : IN_LIST
 }
 
 <IN_LIST>
 TOKEN: {
 	<LIST_EOL: "\r" | "\r\n" | "\n"> : DEFAULT
-|	<LIST_LIST: <LIST>>
+|	<LIST_BLIST: <BLIST>>
+|	<LIST_NLIST: <NLIST>>
 |	<LIST_BOLD: <BOLD>>
 |	<LIST_ITALIC: <ITALIC>>
 |	<LIST_UNDERLINE: <UNDERLINE>>
@@ -281,7 +287,8 @@ void Paragraph() : {}
 		Title()			|
 		MainTitle()		|
 		MainMainTitle()	|
-		List()			|
+		BList()			|
+		NList()			|
 		Hrule()			|
 		Link()			|
 		Table()
@@ -419,18 +426,44 @@ void TableCol() : {}
 }
 
 
-/** List */
+/** Bulleted List */
 
-void List() : 
+void BList() : 
 {
 	int listDepth = 1;
 }
 {
-	<LIST> 
+	<BLIST> 
 	[
 		LOOKAHEAD(2) 
 		(
-			<LIST_LIST> { listDepth += 1; }
+			<LIST_BLIST> { listDepth += 1; }
+		)+
+	] 
+	(
+		LOOKAHEAD(2)
+		Text()			|
+		ForceNewline()	| 
+		Bold()			| 
+		Italic()		| 
+		Underline()
+	)+
+	<LIST_EOL>
+	{ jjtThis.setOption("depth", listDepth); }
+}
+
+/** Numbered List */
+
+void NList() : 
+{
+	int listDepth = 1;
+}
+{
+	<NLIST> 
+	[
+		LOOKAHEAD(2) 
+		(
+			<LIST_NLIST> { listDepth += 1; }
 		)+
 	] 
 	(
