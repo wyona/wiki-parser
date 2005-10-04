@@ -5,8 +5,9 @@
   <ant:property name="classes.dir" value="${build.dir}/classes"/>
   <ant:property name="lib.dir" value="${build.dir}/lib"/>
   <ant:property name="maven.repo.local" value="${user.home}/.maven/repository"/>
+  <!-- Does not work with Windows at this moment, see TODO below 
   <property name="classpath.jar" value="${maven.repo.local}/log4j/jars/log4j-1.2.9.jar"/>
-	  
+  -->	  
   <goal name="wikiparser:compile">
     <attainGoal name="wikiparser:generate"/>		
     <echo>Compiling the WikiParser</echo>
