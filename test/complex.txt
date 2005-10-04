@@ -17,7 +17,7 @@ __bold__
 
 * list
 ** list
-********** deeeeep list __yes__ \\ ''wiki'' ********** deeeeep list __yes__ \\ ''wiki''
+********** deeeeep list __yes__ \\ ''wiki''
 * flat
 
 [ link | label ]
