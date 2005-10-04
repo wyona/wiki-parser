@@ -3,7 +3,8 @@ Wiki-Parser
 
  1) Prerequisites
  
- 2) Installation
+ 2.1) Installation (Linux)
+ 2.2) Installation (Windows)
 
 
 
@@ -22,6 +23,6 @@ Wiki-Parser
    
 2.2) Installation (Windows)
    
-   ant compile
+   maven wikiparser:compile
    Put new classes directory into Classpath
    java org.wyona.wiki.Wiki2XML <file>
