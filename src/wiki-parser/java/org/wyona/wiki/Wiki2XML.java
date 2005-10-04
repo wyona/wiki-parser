@@ -19,6 +19,7 @@ public class Wiki2XML {
                 FileInputStream fstream = new FileInputStream(args[0]);
                 WikiParser wikiin = new WikiParser(fstream);
                 wikiin.traverseXML(wikiin.WikiBody(),0);
+                new Wiki2XML().traverse();
             } 
             catch (Exception e)
             {
@@ -32,6 +33,13 @@ public class Wiki2XML {
                 System.out.println("No file specified");
             }
         }
+    }
+
+    /**
+     * Traverse tree and output XML
+     */
+    public void traverse() {
+        System.out.println("Hello Gregor");
     }
 }
 
