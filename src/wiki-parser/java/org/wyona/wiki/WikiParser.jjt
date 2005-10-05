@@ -25,6 +25,12 @@ Wannabe a wiki parser // must go on with that paragraph //
 
 */
 
+options {
+	UNICODE_INPUT = true; 
+	//JAVA_UNICODE_ESCAPE = false;
+}
+
+
 PARSER_BEGIN(WikiParser)
 
 package org.wyona.wiki;
@@ -54,16 +60,11 @@ public class WikiParser {
             e.printStackTrace();            
         }
     } 
-    /*
-    public WikiParser(java.io.InputStream is, boolean sthack)
-    {
-    	if (jj_initialized_once) {
-    		ReInit(is);
-    	} else {
-    		WikiParser(is);	
-    	}
+    
+    public static boolean isInitialized() {
+    	return jj_initialized_once;
     }
-    */
+    
     /**
     * 	This method will output the node tree to the console.
     */
@@ -380,6 +381,7 @@ void Link() :
 {
 	<LINK>		
 	(
+		LOOKAHEAD(2)
 		tmpStr = Text()
 		{
 			textStr += tmpStr;
