@@ -34,6 +34,8 @@ import java.util.Set;
 
 public class WikiParser {	
 	
+	
+	
 	// needed for XML Header
 	static boolean show = true;
 
@@ -52,7 +54,16 @@ public class WikiParser {
             e.printStackTrace();            
         }
     } 
-    
+    /*
+    public WikiParser(java.io.InputStream is, boolean sthack)
+    {
+    	if (jj_initialized_once) {
+    		ReInit(is);
+    	} else {
+    		WikiParser(is);	
+    	}
+    }
+    */
     /**
     * 	This method will output the node tree to the console.
     */
@@ -359,35 +370,51 @@ void Underline() : {}
 
 void Link() : 
 {
-	String textStr = null;
-	String linkStr = "";	
+	Token t = null;
+	String tmpStr = null;
+	String textStr = "";
+	String linkStr = null;
+	String labelStr = null;
+		
 }
 {
-	<LINK> 
+	<LINK>		
 	(
-		LOOKAHEAD(2)
-		textStr = Text()
+		tmpStr = Text()
 		{
-			linkStr += textStr;
+			textStr += tmpStr;
 		}
-	)+ 
-	{ 
-		jjtThis.setOption("value", linkStr);
+	)*
+	{
+		System.out.println(textStr);	
 	}
 	[ 
-		LinkLabel()
-	] 
+		t = <LINK_SEPARATOR> 
+		{ 
+			labelStr = textStr; 
+			textStr = "";	
+		}
+	] 	
+	{
+		if (labelStr == null) {
+			linkStr = textStr;				
+		} else {
+			linkStr = "";	
+		}
+	}
+	(
+		tmpStr = Text()
+		{			
+			linkStr += tmpStr;			
+		}
+	)*	
+	{
+		jjtThis.setOption("href", linkStr);
+		if (labelStr != null)
+			jjtThis.setOption("label", labelStr);		
+	}
 	<LINK_END>
 	<LINK_EOL>
-}
-
-void LinkLabel() : {}
-{
-	<LINK_SEPARATOR> 
-	(
-		LOOKAHEAD(2)
-		Text()
-	)+	
 }
 
 
