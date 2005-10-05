@@ -27,7 +27,7 @@ Wannabe a wiki parser // must go on with that paragraph //
 
 options {
 	UNICODE_INPUT = true; 
-	//JAVA_UNICODE_ESCAPE = false;
+	STATIC = false;
 }
 
 
@@ -60,10 +60,6 @@ public class WikiParser {
             e.printStackTrace();            
         }
     } 
-    
-    public static boolean isInitialized() {
-    	return jj_initialized_once;
-    }
     
     /**
     * 	This method will output the node tree to the console.
