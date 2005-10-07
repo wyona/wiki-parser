@@ -229,7 +229,7 @@ TOKEN: {
 <IN_LINK>
 TOKEN: {
 	<LINK_EOL: "\r" | "\r\n" | "\n"> : DEFAULT
-|	<LINK_END: "]">
+|	<LINK_END: "]"> : DEFAULT
 |	<LINK_SEPARATOR: "|">
 |	<LINK_ANY_CHAR: ~[]>
 }
@@ -412,7 +412,6 @@ void Link() :
 			jjtThis.setOption("label", labelStr);		
 	}
 	<LINK_END>
-	<LINK_EOL>
 }
 
 
