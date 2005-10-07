@@ -154,7 +154,7 @@ TOKEN: {
 
 <DEFAULT>
 TOKEN: {
-	<HRULE: "---">	
+	<HRULE: "----">	
 }
 
 <DEFAULT>
@@ -236,12 +236,12 @@ TOKEN: {
 
 <DEFAULT> 
 TOKEN: {
-	<START_PLAIN: "{{"> : IN_PLAIN
+	<START_PLAIN: "{{{"> : IN_PLAIN
 }
 
 <IN_PLAIN>
 TOKEN: {
-	<END_PLAIN: "}}"> : DEFAULT
+	<END_PLAIN: "}}}"> : DEFAULT
 |	<PLAIN_ANY_CHAR: ~[]>
 }
 
