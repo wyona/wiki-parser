@@ -1,2 +1,2 @@
-[http://www.test.com]
-[http://www.test.com|With label]
+[http://www.foo.bar]
+[Label|http://www.foo.bar]
