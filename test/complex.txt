@@ -1,6 +1,6 @@
 ! test wiki document
 
-wiki \\ wiki --- wiki \\ __ this '' is ^^ a test ^^'' wiki __
+wiki \\ wiki ---- wiki \\ __ this '' is ^^ a test ^^'' wiki __
 
 __bold__
 ''italic''

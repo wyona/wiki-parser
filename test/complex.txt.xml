@@ -278,36 +278,23 @@
   </MainMainTitle>
  </Paragraph>
  <Paragraph>
-  <List depth="1">
+  <BList depth="1">
    <Text value=" "/>
    <Text value="l"/>
    <Text value="i"/>
    <Text value="s"/>
    <Text value="t"/>
-  </List>
-  <List depth="2">
+  </BList>
+  <BList depth="2">
    <Text value=" "/>
    <Text value="l"/>
    <Text value="i"/>
    <Text value="s"/>
    <Text value="t"/>
-  </List>
-  <Text value="<"/>
-  <Text value="<"/>
-  <Text value="<"/>
-  <Text value="<"/>
-  <Text value="<"/>
-  <Text value="<"/>
-  <Text value="<"/>
-  <Text value=" "/>
-  <Text value="."/>
-  <Text value="m"/>
-  <Text value="i"/>
-  <Text value="n"/>
-  <Text value="e"/>
+  </BList>
  </Paragraph>
  <Paragraph>
-  <List depth="10">
+  <BList depth="10">
    <Text value=" "/>
    <Text value="d"/>
    <Text value="e"/>
@@ -337,7 +324,7 @@
     <Text value="i"/>
    </Italic>
    <Text value=" "/>
-  </List>
+  </BList>
   <Text value="="/>
   <Text value="="/>
   <Text value="="/>
@@ -347,7 +334,7 @@
   <Text value="="/>
  </Paragraph>
  <Paragraph>
-  <List depth="10">
+  <BList depth="10">
    <Text value=" "/>
    <Text value="d"/>
    <Text value="e"/>
@@ -376,50 +363,36 @@
     <Text value="k"/>
     <Text value="i"/>
    </Italic>
-  </List>
-  <Text value=">"/>
-  <Text value=">"/>
-  <Text value=">"/>
-  <Text value=">"/>
-  <Text value=">"/>
-  <Text value=">"/>
-  <Text value=">"/>
-  <Text value=" "/>
-  <Text value="."/>
-  <Text value="r"/>
-  <Text value="5"/>
-  <Text value="8"/>
-  <Text value="2"/>
-  <Text value="0"/>
+  </BList>
  </Paragraph>
  <Paragraph>
-  <List depth="1">
+  <BList depth="1">
    <Text value=" "/>
    <Text value="f"/>
    <Text value="l"/>
    <Text value="a"/>
    <Text value="t"/>
-  </List>
+  </BList>
  </Paragraph>
  <Paragraph>
-  <Link value=" link ">
+  <Link href=" label " label=" link ">
    <Text value=" "/>
    <Text value="l"/>
    <Text value="i"/>
    <Text value="n"/>
    <Text value="k"/>
    <Text value=" "/>
-   <LinkLabel>
-    <Text value=" "/>
-    <Text value="l"/>
-    <Text value="a"/>
-    <Text value="b"/>
-    <Text value="e"/>
-    <Text value="l"/>
-    <Text value=" "/>
-   </LinkLabel>
+   <Text value=" "/>
+   <Text value="l"/>
+   <Text value="a"/>
+   <Text value="b"/>
+   <Text value="e"/>
+   <Text value="l"/>
+   <Text value=" "/>
   </Link>
-  <Link value=" link __dd__ ">
+ </Paragraph>
+ <Paragraph>
+  <Link href=" label " label=" link __dd__ ">
    <Text value=" "/>
    <Text value="l"/>
    <Text value="i"/>
@@ -433,15 +406,13 @@
    <Text value="_"/>
    <Text value="_"/>
    <Text value=" "/>
-   <LinkLabel>
-    <Text value=" "/>
-    <Text value="l"/>
-    <Text value="a"/>
-    <Text value="b"/>
-    <Text value="e"/>
-    <Text value="l"/>
-    <Text value=" "/>
-   </LinkLabel>
+   <Text value=" "/>
+   <Text value="l"/>
+   <Text value="a"/>
+   <Text value="b"/>
+   <Text value="e"/>
+   <Text value="l"/>
+   <Text value=" "/>
   </Link>
  </Paragraph>
  <Paragraph>

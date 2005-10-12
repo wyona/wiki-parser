@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <WikiBody>
  <Paragraph>
-  <Link value="http://www.test.com">
+  <Link href="http://www.foo.bar">
    <Text value="h"/>
    <Text value="t"/>
    <Text value="t"/>
@@ -13,16 +13,22 @@
    <Text value="w"/>
    <Text value="w"/>
    <Text value="."/>
-   <Text value="t"/>
-   <Text value="e"/>
-   <Text value="s"/>
-   <Text value="t"/>
-   <Text value="."/>
-   <Text value="c"/>
+   <Text value="f"/>
    <Text value="o"/>
-   <Text value="m"/>
+   <Text value="o"/>
+   <Text value="."/>
+   <Text value="b"/>
+   <Text value="a"/>
+   <Text value="r"/>
   </Link>
-  <Link value="http://www.test.com">
+ </Paragraph>
+ <Paragraph>
+  <Link href="http://www.foo.bar" label="Label">
+   <Text value="L"/>
+   <Text value="a"/>
+   <Text value="b"/>
+   <Text value="e"/>
+   <Text value="l"/>
    <Text value="h"/>
    <Text value="t"/>
    <Text value="t"/>
@@ -34,26 +40,13 @@
    <Text value="w"/>
    <Text value="w"/>
    <Text value="."/>
-   <Text value="t"/>
-   <Text value="e"/>
-   <Text value="s"/>
-   <Text value="t"/>
-   <Text value="."/>
-   <Text value="c"/>
+   <Text value="f"/>
    <Text value="o"/>
-   <Text value="m"/>
-   <LinkLabel>
-    <Text value="W"/>
-    <Text value="i"/>
-    <Text value="t"/>
-    <Text value="h"/>
-    <Text value=" "/>
-    <Text value="l"/>
-    <Text value="a"/>
-    <Text value="b"/>
-    <Text value="e"/>
-    <Text value="l"/>
-   </LinkLabel>
+   <Text value="o"/>
+   <Text value="."/>
+   <Text value="b"/>
+   <Text value="a"/>
+   <Text value="r"/>
   </Link>
  </Paragraph>
 </WikiBody>

@@ -12,12 +12,14 @@
  <Paragraph>
   <Hrule/>
   <Hrule/>
-  <Hrule/>
+  <Text value="-"/>
+  <Text value="-"/>
  </Paragraph>
  <Paragraph>
   <Hrule/>
   <Hrule/>
-  <Hrule/>
+  <Text value="-"/>
+  <Text value="-"/>
   <Text value="-"/>
  </Paragraph>
 </WikiBody>
