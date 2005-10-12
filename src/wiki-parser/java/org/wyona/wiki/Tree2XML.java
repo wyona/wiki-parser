@@ -123,7 +123,6 @@ public class Tree2XML {
 
     private void finalizeText() throws SAXException {
         if (textBuf != null) {
-            System.out.println("text:" + "'" + textBuf.toString() + "'");
             char[] text = textBuf.toString().toCharArray();
             contentHandler.characters(text, 0, text.length);
             resetText();
