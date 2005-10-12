@@ -27,7 +27,7 @@ public class Tree2XML {
     ContentHandler contentHandler;
 
     /** Actions which will be grouped together into text() nodes */
-    final static String[] textActions = { "Text" };
+    final static String[] textActions = { "Text", "PlainText" };
 
     /** Actions where nested Actions should be ignored */
     final static String[] ignoreNestedActions = { "Link" };

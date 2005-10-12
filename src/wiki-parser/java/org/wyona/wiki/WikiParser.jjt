@@ -444,14 +444,8 @@ void Plain() :
 	<START_PLAIN> 
 	(
 		LOOKAHEAD(2) 
-		textStr = PlainText()
-		{
-			plainStr += textStr;	
-		}
+		PlainText()		
 	)* 
-	{ 
-		jjtThis.setOption("value", plainStr);
-	}
 	<END_PLAIN>	
 }
 
