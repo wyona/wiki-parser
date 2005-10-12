@@ -2,29 +2,6 @@
 * JavaCC Wiki grammar file
 */
 
-/** Tests 
-
-__a__ ''b'' ^^c^^
-__a__
-''a''
-^^a^^
-! __a ''b'' c__ d!
-* a
-** a
-*** a
-* a 
----
-  --- ! cool __ stuff ''rocks'' __
-a//b//c//d//e
-! __a // ''b // '' c // __ d!
-Wannabe a wiki parser // must go on with that paragraph //
-|a|b|c|
-|a|b|c|
-|a|b|c|
-|''a'' __a''a''__|a|
-
-*/
-
 options {
 	UNICODE_INPUT = true; 
 	STATIC = false;
@@ -39,20 +16,12 @@ import java.util.Iterator;
 import java.util.Set;
 
 public class WikiParser {	
-	
-	
-	
-	// needed for XML Header
-	static boolean show = true;
 
     public static void main(String args[]) {
-
-        System.out.println("Enter Wiki-Markup:");
-        
+        System.out.println("Enter Wiki-Markup:");        
         WikiParser t = new WikiParser(System.in);
         try {        	
-            SimpleNode n = t.WikiBody();
-            //n.dump("");            
+            SimpleNode n = t.WikiBody();     
 			debugNodeTree(n, 0);            
         } catch (Exception e) {        	
             System.out.println("Oops.");
@@ -84,43 +53,7 @@ public class WikiParser {
                 debugNodeTree((SimpleNode)node.jjtGetChild(i), depth + 1);
             }            
         }                
-    }
-    
-    /**
-    * This method generates XML output.
-    */
-    public static void traverseXML(SimpleNode node, int depth) {    	    	
-    	SimpleNode n = node;
-		
-		// display once header!
-		if (show) {
-			System.out.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-			show = false;
-		}
-				
-    	for (int i=0; i<depth; i++)
-  			System.out.print(" ");    	
-    	System.out.print("<" + n.toString());  		
-  		if (!node.optionMap.isEmpty()) {
-    	    Set keySet = node.optionMap.keySet();
-         	Iterator kit = keySet.iterator();
-            while (kit.hasNext()) {
-               	Object option = kit.next();
-	            Object value = node.optionMap.get(option);
-				System.out.print(" " + option.toString() + "=" + "\"" + value.toString() + "\"");
-    		}
-    	}  		
-    	if (n.jjtGetNumChildren() > 0) {
-    		System.out.println(">"); 
-            for (int i = 0; i < n.jjtGetNumChildren(); i++) 
-                traverseXML((SimpleNode)node.jjtGetChild(i), depth + 1);              			
-           	for (int i = 0; i < depth; i++)
-	  			System.out.print(" ");    	
-	    	System.out.println("</" + n.toString() + ">");
-        } else {
-        	System.out.println("/>"); 
-    	}
-    }
+    }    
 }
 
 PARSER_END(WikiParser)
@@ -383,9 +316,6 @@ void Link() :
 			textStr += tmpStr;
 		}
 	)*
-	{
-		System.out.println(textStr);	
-	}
 	[ 
 		t = <LINK_SEPARATOR> 
 		{ 
