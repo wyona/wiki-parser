@@ -434,12 +434,7 @@ void NList() :
 
 /** Plaintext */
 
-void Plain() : 
-{
-	Token t;
-	String textStr = null;
-	String plainStr = "";	
-}
+void Plain() : {}
 {
 	<START_PLAIN> 
 	(
