@@ -9,7 +9,6 @@ import java.util.Set;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
-import org.xml.sax.helpers.DefaultHandler;
 
 /**
  * @author greg
@@ -18,10 +17,10 @@ import org.xml.sax.helpers.DefaultHandler;
 public class Tree2XML {
 
     /** The URI of the namespace of this generator. */
-    protected final String URI = "http://apache.org/cocoon/wiki/1.0";
+    static public final String URI = "http://apache.org/cocoon/wiki/1.0";
 
     /** The namespace prefix for this namespace. */
-    protected final String PREFIX = "wiki";
+    static public final String PREFIX = "wiki";
 
     /** The content handler */
     ContentHandler contentHandler;
@@ -56,10 +55,7 @@ public class Tree2XML {
      * @throws SAXException
      */
     public void traverseJJTree(SimpleNode node) throws SAXException {
-        contentHandler.startDocument();
-        contentHandler.startPrefixMapping(PREFIX, URI);
         attributes.clear();
-
         if (!node.optionMap.isEmpty()) {
             Set keySet = node.optionMap.keySet();
             Iterator kit = keySet.iterator();
@@ -86,8 +82,6 @@ public class Tree2XML {
         }
         this.contentHandler.endElement(URI, node.toString(), PREFIX + ':' + node.toString());
 
-        contentHandler.endPrefixMapping(PREFIX);
-        contentHandler.endDocument();
     }
 
     public boolean ignoreNode(Node node) {
@@ -127,5 +121,15 @@ public class Tree2XML {
             contentHandler.characters(text, 0, text.length);
             resetText();
         }
+    }
+    
+    public void startDocument() throws SAXException {
+        contentHandler.startDocument(); 
+        contentHandler.startPrefixMapping(PREFIX, URI);
+    }
+    
+    public void endDocument() throws SAXException {
+        contentHandler.endPrefixMapping(PREFIX);
+        contentHandler.endDocument(); 
     }
 }
