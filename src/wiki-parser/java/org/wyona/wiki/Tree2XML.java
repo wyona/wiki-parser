@@ -17,10 +17,10 @@ import org.xml.sax.helpers.AttributesImpl;
 public class Tree2XML {
 
     /** The URI of the namespace of this generator. */
-    static public final String URI = "http://apache.org/cocoon/wiki/1.0";
+    protected final String URI = "http://apache.org/cocoon/wiki/1.0";
 
     /** The namespace prefix for this namespace. */
-    static public final String PREFIX = "wiki";
+    protected final String PREFIX = "wiki";
 
     /** The content handler */
     ContentHandler contentHandler;
