@@ -382,7 +382,15 @@ void TableCol() : {}
 
 /** Bulleted List */
 
-void BList() : 
+void BList() : {}
+{
+	(
+	LOOKAHEAD(2)
+	BListItem()
+	)+
+}
+
+void BListItem() :
 {
 	int listDepth = 1;
 }
@@ -408,7 +416,15 @@ void BList() :
 
 /** Numbered List */
 
-void NList() : 
+void NList() : {}
+{
+	(
+	LOOKAHEAD(2)
+	NListItem()
+	)+
+}
+
+void NListItem() : 
 {
 	int listDepth = 1;
 }
