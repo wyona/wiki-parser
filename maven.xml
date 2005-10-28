@@ -7,36 +7,24 @@
   <ant:property name="maven.repo.local" value="${user.home}/.maven/repository"/>
   <!-- Does not work with Windows at this moment, see TODO below 
   <property name="classpath.jar" value="${maven.repo.local}/log4j/jars/log4j-1.2.9.jar"/>
-  -->      
+  -->	  
   <goal name="wikiparser:compile">
-  
-    <ant:property name="oldclasspath" refid="maven.dependency.classpath" />
-    <ant:path id="maven.dependency.classpath">
-      <ant:pathelement path="${lenya.classes.dir}" />
-      <ant:fileset dir="${lenya.lib.dir}">
-            <ant:include name="*.jar" />
-      </ant:fileset>
-      <ant:pathelement path="${oldclasspath}" />
-    </ant:path>
-    
     <attainGoal name="wikiparser:generate"/>        
     <echo>Compiling the WikiParser</echo>
     <mkdir dir="${classes.dir}"/>
     <echo>Compiling Generated Java Classes</echo>
     <ant:javac srcDir="target/generated-src/main/java" destDir="${classes.dir}" 
-      classpathref="maven.dependency.classpath" />
+      classpathref="maven.dependency.classpath"/>
     <echo>Compiling Java Classes</echo>
     <ant:javac srcDir="${wikiparser.src.dir}" destDir="${classes.dir}" 
       classpathref="maven.dependency.classpath"/>
-      
-    <echo>{$lenya.classes.dir}</echo>
   </goal>      
 
   <goal name="wikiparser:generate">
     <echo>Generating the WikiParser</echo>
     <ant:copy file="${wikiparser.src.dir}/java/org/wyona/wiki/SimpleNode.java"
       toDir="target/generated-src/main/java/" overwrite="yes"/>
-    <attainGoal name="javacc:jjtree-generate"/>    
+    <attainGoal name="javacc:jjtree-generate"/>	
     <attainGoal name="javacc:javacc-generate"/>
   </goal>
 
@@ -50,7 +38,6 @@
         <attribute name="main-class" value="org.wyona.wiki.Wiki2XML"/>
       </manifest>
     </jar>
-    <ant:copy file="${lib.dir}/WikiParser.jar" toDir="${lenya.lib.dir}" />
   </goal>
 
   <goal name="wikiparser:clean">
