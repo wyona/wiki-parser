@@ -5,10 +5,10 @@
   <ant:property name="classes.dir" value="${build.dir}/classes"/>
   <ant:property name="lib.dir" value="${build.dir}/lib"/>
   <ant:property name="maven.repo.local" value="${user.home}/.maven/repository"/>
-  <!-- Does not work with Windows at this moment, see TODO below 
-  <property name="classpath.jar" value="${maven.repo.local}/log4j/jars/log4j-1.2.9.jar"/>
-  -->	  
+
   <goal name="wikiparser:compile">
+  
+    <ant:include name="*.jar" />
     <attainGoal name="wikiparser:generate"/>        
     <echo>Compiling the WikiParser</echo>
     <mkdir dir="${classes.dir}"/>
@@ -24,7 +24,7 @@
     <echo>Generating the WikiParser</echo>
     <ant:copy file="${wikiparser.src.dir}/java/org/wyona/wiki/SimpleNode.java"
       toDir="target/generated-src/main/java/" overwrite="yes"/>
-    <attainGoal name="javacc:jjtree-generate"/>	
+    <attainGoal name="javacc:jjtree-generate"/>    
     <attainGoal name="javacc:javacc-generate"/>
   </goal>
 
@@ -33,8 +33,6 @@
     <mkdir dir="${lib.dir}"/>
     <jar destfile="${lib.dir}/WikiParser.jar" basedir="${classes.dir}" update="false">
       <manifest>
-        <!-- TODO: Windows seems to have a problem with the class-path within the MANIFEST! -->
-        <attribute name="class-path" value="${classpath.jar}"/>
         <attribute name="main-class" value="org.wyona.wiki.Wiki2XML"/>
       </manifest>
     </jar>
