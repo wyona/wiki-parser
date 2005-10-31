@@ -14,19 +14,32 @@ package org.wyona.wiki;
 
 import java.util.Iterator;
 import java.util.Set;
+import java.io.*;
 
 public class WikiParser {    
 
     public static void main(String args[]) {
-        System.out.println("Enter Wiki-Markup:");        
-        WikiParser t = new WikiParser(System.in);
-        try {            
-            SimpleNode n = t.WikiBody();     
-            debugNodeTree(n, 0);            
-        } catch (Exception e) {            
-            System.out.println("Oops.");
+     
+     WikiParser wikiParser = null;
+     
+     try {            
+      
+         if (args.length == 1) {
+             wikiParser = new WikiParser(new WikiParserTokenManager(new SimpleCharStream(
+                 new InputStreamReader(new FileInputStream(args[0]), "UTF-8")))); 
+         } else {           
+             wikiParser = new WikiParser(new WikiParserTokenManager(new SimpleCharStream(
+                 new InputStreamReader(System.in, "UTF-8")))); 
+         }        
+        
+         SimpleNode n = wikiParser.WikiBody();     
+         debugNodeTree(n, 0);            
+        
+     } catch (ParseException e) {
             System.out.println(e.getMessage());
-            e.printStackTrace();            
+            e.printStackTrace();                   
+        } catch (Exception e) {            
+            e.printStackTrace();
         }
     } 
     

@@ -9,7 +9,7 @@ for i in *.txt; do
 	echo "running test: $i"
 	
 	echo -n "   generate: "
-	java -jar $JAR $i > $i.xml.test
+	java -jar $JAR $i > $i.tree.test
 	if [ $? -ne 0 ]; then
 		echo "  failed"
 		let FAILS=FAILS+1
@@ -18,7 +18,7 @@ for i in *.txt; do
 	fi
 
 	echo -n "   compare: "
-	diff $i.xml $i.xml.test > $i.xml.test.diff 
+	diff $i.tree $i.tree.test > $i.tree.test.diff 
 	if [ $? -ne 0 ]; then
 		echo "  failed"
 		let FAILS=FAILS+1
@@ -28,8 +28,8 @@ for i in *.txt; do
 done	
 
 if [ $FAILS -eq 0 ]; then
-	rm *.xml.test
-	rm *.xml.test.diff
+	rm *.tree.test
+	rm *.tree.test.diff
 	echo "ALL TESTS PASSED"
 	exit 0
 else
