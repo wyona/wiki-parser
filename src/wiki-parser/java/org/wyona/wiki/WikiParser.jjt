@@ -46,12 +46,12 @@ public class WikiParser {
     /**
     *     This method will output the node tree to the console.
     */
-    public static void debugNodeTree(SimpleNode node, int depth) {
-          SimpleNode n = node;
-          for (int i=0; i<depth; i++) 
-              System.out.print(" ");
-              System.out.print(n.toString());
-            if (!node.optionMap.isEmpty()) {
+	public static void debugNodeTree(SimpleNode node, int depth) {
+        SimpleNode n = node;
+        for (int i = 0; i < depth; i++)
+            System.out.print(" ");
+        System.out.print(n.toString());
+        if (!node.optionMap.isEmpty()) {
             Set keySet = node.optionMap.keySet();
             Iterator kit = keySet.iterator();
             while (kit.hasNext()) {
@@ -59,14 +59,14 @@ public class WikiParser {
                 Object value = node.optionMap.get(option);
                 System.out.print(":" + option.toString() + "=" + value.toString());
             }
-        }        
+        }
         System.out.println();
-        if (n.jjtGetNumChildren() > 0) {            
+        if (n.jjtGetNumChildren() > 0) {
             for (int i = 0; i < n.jjtGetNumChildren(); i++) {
-                debugNodeTree((SimpleNode)node.jjtGetChild(i), depth + 1);
-            }            
-        }                
-    }    
+                debugNodeTree((SimpleNode) node.jjtGetChild(i), depth + 1);
+            }
+        }
+    }  
 }
 
 PARSER_END(WikiParser)
@@ -131,7 +131,16 @@ TOKEN: {
 
 <DEFAULT>
 TOKEN: {
-    <EGG: ":-)">
+    <EM_LAUGH: ":-)">
+|    <EM_NERD: "=)">	
+|    <EM_ANGRY: "%@!">
+|    <EM_TUMBD: "%(">
+|    <EM_TUMBU: "%)">
+|    <EM_IDEA: "%!">
+|    <EM_UMBR: "%()">
+|    <EM_FINGC: "%X">
+|    <EM_QUEST: "%?">
+|    <EM_VACAT: "%*">        
 }
 
 <IN_LIST>
@@ -250,17 +259,38 @@ void Paragraph() : {}
         NList()            |
         Hrule()            |
         Link()            |
-        Table()            |
-        Smile()
+        Table()            |        
+        Emoticons()        
     )+
 }
 
-/** Easteregg */
+/** Emoticons */
 
-void Smile() : {}
+void Emoticons() : {}
 {
-    <EGG>
+    em_laugh()			|
+    em_nerd()			|
+    em_angry()			|
+    em_tumbu()			|
+    em_tumbd()			|
+    em_idea()			|
+    em_umbr()			|
+    em_fingc()			|
+    em_quest()			|
+    em_vacat()			        	
 }
+
+void em_laugh() : {} { <EM_LAUGH> }
+void em_nerd() : {} { <EM_NERD> }
+void em_angry() : {} { <EM_ANGRY> }
+void em_tumbd() : {} { <EM_TUMBD> }
+void em_tumbu() : {} { <EM_TUMBU> }
+void em_idea() : {} { <EM_IDEA> }
+void em_umbr() : {} { <EM_UMBR> }
+void em_fingc() : {} { <EM_FINGC> }
+void em_quest() : {} { <EM_QUEST> }
+void em_vacat() : {} { <EM_VACAT> }
+
 
 void Bold() : {} 
 {
@@ -397,7 +427,7 @@ void TableCol() : {}
         <TABLE_TABLE>
     ) 
     (
-        LOOKAHEAD(2) 
+        LOOKAHEAD(2)
         Text()        | 
         Bold()        | 
         Italic()    | 
