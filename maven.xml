@@ -7,7 +7,6 @@
   <ant:property name="maven.repo.local" value="${user.home}/.maven/repository"/>
 
   <goal name="wikiparser:compile">
-  
     <ant:include name="*.jar" />
     <attainGoal name="wikiparser:generate"/>        
     <echo>Compiling the WikiParser</echo>
@@ -30,10 +29,11 @@
 
   <goal name="wikiparser:jar">
     <attainGoal name="wikiparser:compile"/>
+    <attainGoal name="wikiparser:test"/>	  
     <mkdir dir="${lib.dir}"/>
     <jar destfile="${lib.dir}/WikiParser.jar" basedir="${classes.dir}" update="false">
       <manifest>
-        <attribute name="main-class" value="org.wyona.wiki.WikiParser"/>
+        <attribute name="main-class" value="org.wyona.wiki.test.WikiParser"/>
       </manifest>
     </jar>
   </goal>
@@ -45,7 +45,9 @@
   </goal> 
 
   <goal name="wikiparser:test">
-    <ant:exec executable="test/run-tests.sh"/>
+    <ant:java classpath="${classes.dir}" classname="org.wyona.wiki.test.ParserTest">
+      <arg value="test"/>
+    </ant:java>		  
   </goal>
   
   <goal name="wikiparser:generate-tests">
