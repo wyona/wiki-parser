@@ -12,6 +12,9 @@ Wiki-Parser
 
    Linux:
    Maven >= 1.0.2	http://maven.apache.org
+   export PATH=/usr/local/maven/bin:$PATH
+
+
    Windows:
    Ant >= 1.6.5		http://ant.apache.org
 
