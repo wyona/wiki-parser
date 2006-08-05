@@ -33,7 +33,10 @@
     <mkdir dir="${lib.dir}"/>
     <jar destfile="${lib.dir}/WikiParser.jar" basedir="${classes.dir}" update="false">
       <manifest>
+        <attribute name="main-class" value="org.wyona.wiki.test.ParserTest"/>
+	<!--
         <attribute name="main-class" value="org.wyona.wiki.test.WikiParser"/>
+	-->
       </manifest>
     </jar>
   </goal>
