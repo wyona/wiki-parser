@@ -21,12 +21,13 @@ Wiki-Parser
     
 2.1) Installation (Linux)
 
+   (OPTIONAL: maven wikiparser:clean)
    maven wikiparser:jar
 
-   java -jar build/lib/WikiParser.jar <file>
-   (e.g. java -jar build/lib/WikiParser.jar test)
+   java -jar build/lib/wyona-wiki-parser-rXXXXX.jar <file>
+   (e.g. java -jar build/lib/wyona-wiki-parser-rXXXXX.jar test)
 
-   java -classpath build/lib/WikiParser.jar org.wyona.wiki.Wiki2XML test/complex.txt
+   java -classpath build/lib/wyona-wiki-parser-rXXXXX.jar org.wyona.wiki.Wiki2XML test/complex.txt
    
 2.2) Installation (Windows)
    
