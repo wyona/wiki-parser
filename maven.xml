@@ -9,7 +9,7 @@
   <goal name="wikiparser:compile">
     <ant:include name="*.jar" />
     <attainGoal name="wikiparser:generate"/>        
-    <echo>Compiling the WikiParser</echo>
+    <echo>Compiling the Wiki Parser</echo>
     <mkdir dir="${classes.dir}"/>
     <echo>Compiling Generated Java Classes</echo>
     <ant:javac srcDir="target/generated-src/main/java" destDir="${classes.dir}" 
@@ -20,7 +20,7 @@
   </goal>      
 
   <goal name="wikiparser:generate">
-    <echo>Generating the WikiParser</echo>
+    <echo>Generating the Wiki Parser</echo>
     <ant:copy file="${wikiparser.src.dir}/java/org/wyona/wiki/SimpleNode.java"
       toDir="target/generated-src/main/java/" overwrite="yes"/>
     <attainGoal name="javacc:jjtree-generate"/>    
@@ -31,12 +31,9 @@
     <attainGoal name="wikiparser:compile"/>
     <attainGoal name="wikiparser:test"/>	  
     <mkdir dir="${lib.dir}"/>
-    <jar destfile="${lib.dir}/WikiParser.jar" basedir="${classes.dir}" update="false">
+    <jar destfile="${lib.dir}/wyona-wiki-parser-r${stable.revision}.jar" basedir="${classes.dir}" update="false">
       <manifest>
         <attribute name="main-class" value="org.wyona.wiki.test.ParserTest"/>
-	<!--
-        <attribute name="main-class" value="org.wyona.wiki.test.WikiParser"/>
-	-->
       </manifest>
     </jar>
   </goal>
