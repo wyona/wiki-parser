@@ -24,10 +24,10 @@ Wiki-Parser
    (OPTIONAL: maven wikiparser:clean)
    maven wikiparser:jar
 
-   java -jar build/lib/wyona-wiki-parser-rXXXXX.jar <file>
-   (e.g. java -jar build/lib/wyona-wiki-parser-rXXXXX.jar test)
+   Run Tests: java -jar build/lib/wyona-wiki-parser-rXXXXX.jar <file>
+              (e.g. java -jar build/lib/wyona-wiki-parser-rXXXXX.jar test)
 
-   java -classpath build/lib/wyona-wiki-parser-rXXXXX.jar org.wyona.wiki.Wiki2XML test/hello-world.txt
+   Generate XML: java -classpath build/lib/wyona-wiki-parser-rXXXXX.jar org.wyona.wiki.Wiki2XML test/hello-world.txt
    
 2.2) Installation (Windows)
    
