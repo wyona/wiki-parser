@@ -29,7 +29,9 @@
 
   <goal name="wikiparser:jar">
     <attainGoal name="wikiparser:compile"/>
+<!--
     <attainGoal name="wikiparser:test"/>	  
+-->
     <mkdir dir="${lib.dir}"/>
     <jar destfile="${lib.dir}/wyona-wiki-parser-r${stable.revision}.jar" basedir="${classes.dir}" update="false">
       <manifest>
