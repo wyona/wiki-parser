@@ -11,18 +11,18 @@ Line 2
 
 [Wyona|http://www.wyona.com]
 
-*Make a bulleted list (must be in first column). Use more (**) for deeper indentations.
+*Make a bulleted list (must be in first column). Use more for deeper indentations.
 
 * Bullet1
 ** Bullet2
 
-*Make a numbered list (must be in first column). Use more (##, ###) for deeper indentations.
+*Make a numbered list (must be in first column). Use more for deeper indentations.
 
 # Element1
 ## Element2
 ### Element3
 
-*Start a line with an exclamation mark (!) to make a heading. More exclamation marks mean bigger headings.
+*Start a line with an exclamation mark to make a heading. More exclamation marks mean bigger headings.
 
 ! Heading1
 !! Heading2
@@ -32,7 +32,7 @@ Line 2
 
 __Bold Text__
 
-*Makes text in italics (notice that these are single quotes ('))
+*Makes text in italics
 
 ''Italic Text''
 
