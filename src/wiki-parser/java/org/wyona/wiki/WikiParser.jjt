@@ -91,11 +91,11 @@ TOKEN: {
 <DEFAULT_NOTAGS>
 TOKEN: {
     <NOTAGS_EOL: "\r" | "\r\n" | "\n"> : DEFAULT
-|    <NOTAGS_BOLD: <BOLD>>
-|    <NOTAGS_ITALIC: <ITALIC>>
-|    <NOTAGS_UNDERLINE: <UNDERLINE>>
+|   <NOTAGS_BOLD: <BOLD>>
+|   <NOTAGS_ITALIC: <ITALIC>>
+|   <NOTAGS_UNDERLINE: <UNDERLINE>>
 |   <NOTAGS_FORCE_NEWLINE: <FORCE_NEWLINE>>
-|    <NOTAGS_ANY_CHAR: ~[]>
+|   <NOTAGS_ANY_CHAR: ~[]>
 }
 
 <DEFAULT>
@@ -111,12 +111,12 @@ TOKEN: {
 <IN_TABLE>
 TOKEN: {
     <TABLE_EOL: "\r" | "\r\n" | "\n"> : DEFAULT
-|    <TABLE_TABLE: "|">
-|    <TABLE_BOLD: <BOLD>>
-|    <TABLE_ITALIC: <ITALIC>>
-|    <TABLE_UNDERLINE: <UNDERLINE>>
+|   <TABLE_TABLE: "|">
+|   <TABLE_BOLD: <BOLD>>
+|   <TABLE_ITALIC: <ITALIC>>
+|   <TABLE_UNDERLINE: <UNDERLINE>>
 |   <TABLE_FORCE_NEWLINE: <FORCE_NEWLINE>>
-|    <TABLE_ANY_CHAR: ~[]> 
+|   <TABLE_ANY_CHAR: ~[]> 
 }
 
 <DEFAULT>
@@ -132,27 +132,27 @@ TOKEN: {
 <DEFAULT>
 TOKEN: {
     <EM_LAUGH: ":-)">
-|    <EM_NERD: "=)">	
-|    <EM_ANGRY: "%@!">
-|    <EM_TUMBD: "%(">
-|    <EM_TUMBU: "%)">
-|    <EM_IDEA: "%!">
-|    <EM_UMBR: "%()">
-|    <EM_FINGC: "%X">
-|    <EM_QUEST: "%?">
-|    <EM_VACAT: "%*">        
+|   <EM_NERD: "=)">	
+|   <EM_ANGRY: "%@!">
+|   <EM_TUMBD: "%(">
+|   <EM_TUMBU: "%)">
+|   <EM_IDEA: "%!">
+|   <EM_UMBR: "%()">
+|   <EM_FINGC: "%X">
+|   <EM_QUEST: "%?">
+|   <EM_VACAT: "%*">        
 }
 
 <IN_LIST>
 TOKEN: {
     <LIST_EOL: "\r" | "\r\n" | "\n"> : DEFAULT
-|    <LIST_BLIST: <BLIST>>
-|    <LIST_NLIST: <NLIST>>
-|    <LIST_BOLD: <BOLD>>
-|    <LIST_ITALIC: <ITALIC>>
-|    <LIST_UNDERLINE: <UNDERLINE>>
+|   <LIST_BLIST: <BLIST>>
+|   <LIST_NLIST: <NLIST>>
+|   <LIST_BOLD: <BOLD>>
+|   <LIST_ITALIC: <ITALIC>>
+|   <LIST_UNDERLINE: <UNDERLINE>>
 |   <LIST_FORCE_NEWLINE: <FORCE_NEWLINE>>
-|    <LIST_ANY_CHAR: ~[]>
+|   <LIST_ANY_CHAR: ~[]>
 }
 
 <DEFAULT> 
@@ -174,11 +174,11 @@ TOKEN: {
 <IN_TITLE>
 TOKEN: {
     <TITLE_EOL: "\r" | "\r\n" | "\n"> : DEFAULT
-|    <TITLE_BOLD: <BOLD>>
-|    <TITLE_ITALIC: <ITALIC>>
-|    <TITLE_UNDERLINE: <UNDERLINE>>
+|   <TITLE_BOLD: <BOLD>>
+|   <TITLE_ITALIC: <ITALIC>>
+|   <TITLE_UNDERLINE: <UNDERLINE>>
 |   <TITLE_FORCE_NEWLINE: <FORCE_NEWLINE>>
-|    <TITLE_ANY_CHAR: ~[]>
+|   <TITLE_ANY_CHAR: ~[]>
 }
 
 <DEFAULT> 
@@ -189,20 +189,20 @@ TOKEN: {
 <IN_LINK>
 TOKEN: {
     <LINK_EOL: "\r" | "\r\n" | "\n"> : DEFAULT
-|    <LINK_END: "]"> : DEFAULT
-|    <LINK_SEPARATOR: "|">
-|    <LINK_ANY_CHAR: ~[]>
+|   <LINK_END: "]"> : DEFAULT
+|   <LINK_SEPARATOR: "|">
+|   <LINK_ANY_CHAR: ~[]>
 }
 
 <DEFAULT> 
 TOKEN: {
-    <START_PLAIN: "{{{"> : IN_PLAIN
+    <START_PLAIN: "{{"> : IN_PLAIN
 }
 
 <IN_PLAIN>
 TOKEN: {
-    <END_PLAIN: "}}}"> : DEFAULT
-|    <PLAIN_ANY_CHAR: ~[]>
+    <END_PLAIN: "}}"> : DEFAULT
+|   <PLAIN_ANY_CHAR: ~[]>
 }
 
 <DEFAULT> 
@@ -232,8 +232,8 @@ SimpleNode WikiBody() : {}
 {
     (
         LOOKAHEAD(2)
-        Paragraph()     |
-        <EOL>            | 
+        Paragraph()         |
+        <EOL>               | 
         <NOTAGS_EOL>
     )*
     <EOF>
@@ -246,20 +246,20 @@ void Paragraph() : {}
 {
     (
         LOOKAHEAD(2) 
-        Plain()            | 
-        Text()            | 
-        Bold()            | 
-        Italic()        | 
-        Underline()     | 
-        ForceNewline()    | 
-        Title()            |
-        MainTitle()        |
-        MainMainTitle()    |
-        BList()            |
-        NList()            |
-        Hrule()            |
-        Link()            |
-        Table()            |        
+        Plain()             | 
+        Text()              | 
+        Bold()              | 
+        Italic()            | 
+        Underline()         |  
+        ForceNewline()      | 
+        Title()             |
+        MainTitle()         |
+        MainMainTitle()     |
+        BList()             |
+        NList()             |
+        Hrule()             |
+        Link()              |
+        Table()             |        
         Emoticons()        
     )+
 }
@@ -268,15 +268,15 @@ void Paragraph() : {}
 
 void Emoticons() : {}
 {
-    em_laugh()			|
-    em_nerd()			|
-    em_angry()			|
-    em_tumbu()			|
-    em_tumbd()			|
-    em_idea()			|
-    em_umbr()			|
-    em_fingc()			|
-    em_quest()			|
+    em_laugh()			    |
+    em_nerd()			    |
+    em_angry()			    |
+    em_tumbu()			    |
+    em_tumbd()			    |
+    em_idea()			    |
+    em_umbr()			    |
+    em_fingc()			    |
+    em_quest()			    |
     em_vacat()			        	
 }
 
@@ -295,19 +295,19 @@ void em_vacat() : {} { <EM_VACAT> }
 void Bold() : {} 
 {
     (
-        <TITLE_BOLD>    | 
-        <BOLD>            | 
-        <NOTAGS_BOLD>    | 
-        <LIST_BOLD>        | 
+        <TITLE_BOLD>        | 
+        <BOLD>              | 
+        <NOTAGS_BOLD>       | 
+        <LIST_BOLD>         |
         <TABLE_BOLD>
     ) 
     (
         Text() | ForceNewline() | Italic() | Underline()
     )+
     (
-        <TITLE_BOLD>    | 
-        <NOTAGS_BOLD>    | 
-        <LIST_BOLD>        | 
+        <TITLE_BOLD>        | 
+        <NOTAGS_BOLD>       | 
+        <LIST_BOLD>         | 
         <TABLE_BOLD>
     )
 }
@@ -315,19 +315,19 @@ void Bold() : {}
 void Italic() : {}
 {
     (
-        <TITLE_ITALIC>    | 
-        <ITALIC>         | 
-        <NOTAGS_ITALIC> | 
-        <LIST_ITALIC>    | 
+        <TITLE_ITALIC>      | 
+        <ITALIC>            | 
+        <NOTAGS_ITALIC>     | 
+        <LIST_ITALIC>       | 
         <TABLE_ITALIC>
     ) 
     (
         Text() | ForceNewline() | Bold() | Underline()
     )+
     (
-        <TITLE_ITALIC>    | 
-        <NOTAGS_ITALIC> | 
-        <LIST_ITALIC>    | 
+        <TITLE_ITALIC>      | 
+        <NOTAGS_ITALIC>     | 
+        <LIST_ITALIC>       |
         <TABLE_ITALIC>
     )
 } 
@@ -335,9 +335,9 @@ void Italic() : {}
 void Underline() : {}
 {
     (
-        <TITLE_UNDERLINE>    | 
-        <UNDERLINE>            | 
-        <NOTAGS_UNDERLINE>    | 
+        <TITLE_UNDERLINE>   | 
+        <UNDERLINE>         | 
+        <NOTAGS_UNDERLINE>  | 
         <LIST_UNDERLINE>    | 
         <TABLE_UNDERLINE>
     ) 
@@ -345,8 +345,8 @@ void Underline() : {}
         Text() | ForceNewline() | Italic()| Bold()
     )+
     (
-        <TITLE_UNDERLINE>    |
-        <NOTAGS_UNDERLINE>    | 
+        <TITLE_UNDERLINE>   |
+        <NOTAGS_UNDERLINE>  | 
         <LIST_UNDERLINE>    | 
         <TABLE_UNDERLINE>
     )
@@ -423,14 +423,14 @@ void TableRow(): {}
 void TableCol() : {}
 {
     (
-        <TABLE> | 
+        <TABLE>             | 
         <TABLE_TABLE>
     ) 
     (
         LOOKAHEAD(2)
-        Text()        | 
-        Bold()        | 
-        Italic()    | 
+        Text()              | 
+        Bold()              | 
+        Italic()            | 
         Underline()
     )+ 
 }
@@ -460,10 +460,10 @@ void BListItem() :
     ] 
     (
         LOOKAHEAD(2)
-        Text()            |
-        ForceNewline()    | 
-        Bold()            | 
-        Italic()        | 
+        Text()              |
+        ForceNewline()      | 
+        Bold()              | 
+        Italic()            | 
         Underline()
     )+
     <LIST_EOL>
@@ -494,10 +494,10 @@ void NListItem() :
     ] 
     (
         LOOKAHEAD(2)
-        Text()            |
-        ForceNewline()    | 
-        Bold()            | 
-        Italic()        | 
+        Text()              |
+        ForceNewline()      | 
+        Bold()              | 
+        Italic()            | 
         Underline()
     )+
     <LIST_EOL>
@@ -541,10 +541,10 @@ void Title() : {}
     <TITLE> 
     (
         LOOKAHEAD(2)
-        Text()            |
-        ForceNewline()    | 
-        Bold()            | 
-        Italic()        | 
+        Text()              |
+        ForceNewline()      | 
+        Bold()              | 
+        Italic()            | 
         Underline()
     )+
     <TITLE_EOL>
@@ -555,10 +555,10 @@ void MainTitle() : {}
     <MAINTITLE> 
     (
         LOOKAHEAD(2)
-        Text()            |
-        ForceNewline()    | 
-        Bold()            | 
-        Italic()        | 
+        Text()              |
+        ForceNewline()      | 
+        Bold()              | 
+        Italic()            | 
         Underline()
     )+
     <TITLE_EOL>
@@ -569,10 +569,10 @@ void MainMainTitle() : {}
     <MAINMAINTITLE> 
     (
         LOOKAHEAD(2)
-        Text()            |
-        ForceNewline()    | 
-        Bold()            | 
-        Italic()        | 
+        Text()              |
+        ForceNewline()      |  
+        Bold()              | 
+        Italic()            | 
         Underline()
     )+
     <TITLE_EOL>
@@ -601,9 +601,9 @@ String Text() :
 
 void ForceNewline() : {}
 {
-    <TITLE_FORCE_NEWLINE>    | 
-    <NOTAGS_FORCE_NEWLINE>    | 
+    <TITLE_FORCE_NEWLINE>   | 
+    <NOTAGS_FORCE_NEWLINE>  | 
     <LIST_FORCE_NEWLINE>    |
-    <TABLE_FORCE_NEWLINE>    |
+    <TABLE_FORCE_NEWLINE>   |
     <FORCE_NEWLINE>    
 }
