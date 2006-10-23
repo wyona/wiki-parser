@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns:j="jelly:core" xmlns:ant="jelly:ant">
+  <ant:property name="build.dir" value="build"/>
+  <ant:property name="classes.dir" value="${build.dir}/classes"/>
+  <ant:property name="lib.dir" value="${build.dir}/lib"/>
+  <ant:property name="maven.repo.local" value="${user.home}/.maven/repository"/>
+
+  <goal name="wikiparser:compile">
+    <ant:include name="*.jar" />
+    <attainGoal name="wikiparser:generate"/>        
+    <echo>Compiling the Wiki Parser</echo>
+    <mkdir dir="${classes.dir}"/>
+    <echo>Compiling Generated Java Classes</echo>
+    <ant:javac srcDir="target/generated-src/main/java" destDir="${classes.dir}" 
+      classpathref="maven.dependency.classpath"/>
+    <echo>Compiling Java Classes</echo>
+    <ant:javac srcDir="${wikiparser.src.dir}" destDir="${classes.dir}" 
+      classpathref="maven.dependency.classpath"/>
+  </goal>      
+
+  <goal name="wikiparser:generate">
+    <echo>Generating the Wiki Parser</echo>
+    <ant:copy file="${wikiparser.src.dir}/java/org/wyona/wiki/SimpleNode.java"
+      toDir="target/generated-src/main/java/" overwrite="yes"/>
+    <attainGoal name="javacc:jjtree-generate"/>    
+    <attainGoal name="javacc:javacc-generate"/>
+  </goal>
+
+  <goal name="wikiparser:jar">
+    <attainGoal name="wikiparser:compile"/>
+<!--
+    <attainGoal name="wikiparser:test"/>	  
+-->
+    <mkdir dir="${lib.dir}"/>
+    <jar destfile="${lib.dir}/wyona-wiki-parser-r${stable.revision}.jar" basedir="${classes.dir}" update="false">
+      <manifest>
+        <attribute name="main-class" value="org.wyona.wiki.test.ParserTest"/>
+      </manifest>
+    </jar>
+  </goal>
+
+  <goal name="wikiparser:clean">
+    <ant:delete dir="target"/>
+    <ant:delete dir="build"/>
+    <ant:delete dir="bin"/> 
+  </goal> 
+
+  <goal name="wikiparser:test">
+    <ant:java classpath="${classes.dir}" classname="org.wyona.wiki.test.ParserTest">
+      <arg value="test"/>
+    </ant:java>		  
+  </goal>
+  
+  <goal name="wikiparser:generate-tests">
+    <ant:exec executable="text/generate-tests.sh"/>
+  </goal>
+</project>

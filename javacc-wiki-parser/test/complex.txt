@@ -1,0 +1,30 @@
+! test wiki document
+
+wiki \\ wiki ---- wiki \\ __ this '' is ^^ a test ^^'' wiki __
+
+__bold__
+''italic''
+^^underline^^
+
+| __wiki__ | wikiwiki | ''WIKI'' | wiki |
+|a|b|c|d|
+|asdasd|asdasd|asdasd|aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa|
+
+! again
+
+!! bigger title
+!!! big title
+
+* list
+** list
+
+********** deeeeep list __yes__ \\ ''wiki'' 
+=======
+********** deeeeep list __yes__ \\ ''wiki''
+
+* flat
+
+[ link | label ]
+[ link __dd__ | label ]
+
+asdasdas d as d asd  as da sd 
