@@ -1,0 +1,18 @@
+----
+bla \\
+[link]
+[text|link]
+[text|wiki:link]
+* BList
+** BListItem
+# NList
+## NListItem
+camelCaseLink
+!H4
+!!H3
+!!!H2
+__text__
+''text''
+{{text}}
+;term:def
+|text|more text|
