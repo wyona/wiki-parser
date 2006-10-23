@@ -1,4 +1,0 @@
-|colA-row1|colB-row1|colC-row1|
-|colA-row2|colB-row2|colC-row2|colD-row2|
-|colA-row3|colB-row3|
-|colA-row4__with bold__|colB-row4-''with italic''|

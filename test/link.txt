@@ -1,2 +1,0 @@
-[http://www.foo.bar]
-[Label|http://www.foo.bar]
