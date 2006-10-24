@@ -10,7 +10,7 @@
   <target name="init" description="Init all parameters and other settings">
     <property file="local.build.properties"/>
     <property file="build.properties"/>
-
+    <mkdir dir="${logs.dir}"/>
     <artifact:remoteRepository id="wyona.remote.repository" url="http://www.wyona.org/maven2/"/>
 
     <artifact:dependencies pathId="maven2.classpath" filesetId="maven2.fileset">
@@ -47,13 +47,17 @@
 
       <dependency groupId="apache-org-lucene" artifactId="lucene-highlighter"
                   version="1.x"/>
-      <dependency groupId="wyona-org-jspwiki-parser" artifactId="wyona-org-jspwiki-parser"
-                  version="1.x"/>
-      <dependency groupId="wyona-org-jspwiki-parser" artifactId="wyona-org-jspwiki-parser-test"
-                  version="1.x"/>
+      <dependency groupId="com-ecyrd-jspwiki" artifactId="jspwiki-parser"
+                  version="2.4.56"/>
+      <dependency groupId="com-ecyrd-jspwiki" artifactId="jspwiki-parser-test"
+                  version="2.4.56"/>
       <dependency groupId="apache-org-commons" artifactId="jrcs-diff"
                   version="1.x"/>
 
+      <dependency groupId="wyona-org-wiki-parser" artifactId="jsp-wiki-parser"
+                  version="r19521"/>
+      <dependency groupId="wyona-org-wiki-parser" artifactId="wiki-parser-factory"
+                  version="r19560"/>
 
 
 <!--
@@ -75,17 +79,17 @@
     </path>
 
     <path id="classpath.examples">
-      <fileset dir="lib">
+      <!--fileset dir="lib">
         <include name="*.jar"/>
-      </fileset>
+      </fileset-->
       <pathelement path="${classes.dir}"/>
       <pathelement path="${maven2.cp}"/>
     </path>
 
     <path id="classpath.run">
-      <fileset dir="lib">
+      <!--fileset dir="lib">
         <include name="*.jar"/>
-      </fileset>
+      </fileset-->
       <pathelement path="${classes.dir}"/>
       <pathelement path="properties"/> <!-- log4j.properties -->
       <pathelement path="${maven2.cp}"/>
