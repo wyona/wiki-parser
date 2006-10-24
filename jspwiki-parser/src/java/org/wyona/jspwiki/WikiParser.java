@@ -1,11 +1,11 @@
 package org.wyona.jspwiki;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileReader;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Properties;
 
 import javax.xml.parsers.SAXParser;
@@ -18,33 +18,37 @@ import com.ecyrd.jspwiki.TestEngine;
 /**
  *
  */
-public class WikiParser {
+public class WikiParser extends org.wyona.wikiparser.WikiParser {
     private static Category log = Category.getInstance(WikiParser.class);
     
-    private String path2wikiFile = null;
     private InputStream inputStream = null;
     private Properties props = null;
     
-    public WikiParser(String path2wikiFile) {
-        init(path2wikiFile);
+    public WikiParser(InputStream is) {
+        init(is);
     }
     
     /**
      *
      */
     public static void main(String[] args) {
-        new WikiParser(args[0]);
-    }
-    
-    private void init(String path2WikiFile) {
-    
+        FileInputStream fstream;
         try {
-            this.path2wikiFile = path2WikiFile;
-            loadProperties();
-            transformHtml2Xml();
-        } catch(Exception e) {
+            fstream = new FileInputStream(args[0]);
+            new WikiParser(fstream);
+        } catch (FileNotFoundException e) {
             log.error(e);
         }
+    }
+    
+    private void init(InputStream is) {
+        inputStream = is;
+        loadProperties();
+    }    
+    
+    public void parse(InputStream inputStream) {
+        transformHtml2Xml();
+        getInputStream();
     }
     
     /**
@@ -53,35 +57,29 @@ public class WikiParser {
      */
     private void transformHtml2Xml() {
         try {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(new File(path2wikiFile)));
-            TestEngine engine = new TestEngine(props);
-            String line = null;
             StringBuffer createdHtml = new StringBuffer();
             createdHtml.append("<html><body>");
-            do {
+            InputStreamReader inR = new InputStreamReader(inputStream);
+            BufferedReader bufferedReader = new BufferedReader(inR);
+            TestEngine engine = new TestEngine(props);
+            String line = null;
+            while ((line = bufferedReader.readLine()) != null) {
                 line = bufferedReader.readLine();
                 if(line != null) {
                     line += "\\\\";
                     engine.saveText("NAME", line);
                     createdHtml.append(engine.getHTML("NAME"));                   
                 }
-            } while(line != null);
+            }
             createdHtml.append("</body></html>");
-            log.debug(createdHtml.toString());
             Html2WikiXmlTransformer html2WikiXml = new Html2WikiXmlTransformer();
             SAXParser saxParser = SAXParserFactory.newInstance().newSAXParser();
-            saxParser.parse(new java.io.StringBufferInputStream(createdHtml.toString()), html2WikiXml);
+            saxParser.parse(new java.io.ByteArrayInputStream(createdHtml.toString().getBytes()), html2WikiXml);
             log.debug(html2WikiXml.showTransformedXmlAsString());
-            
             setResultAsInputStream(html2WikiXml.getInputStream());
         } catch(Exception e) {
             log.error(e);
         }
-    }
-    
-    private String getPathToProperties() {
-        File actualPath = new File("ABSOLUTE_PATH");
-        return actualPath.getAbsolutePath().substring(0, actualPath.getAbsolutePath().indexOf("/ABSOLUTE_PATH")); 
     }
     
     /**
@@ -90,7 +88,8 @@ public class WikiParser {
     private void loadProperties() {
         try {
             props = new Properties();
-            props.load(new FileInputStream(new File(getPathToProperties() + "/properties/parser.properties")));    
+            InputStream is = getClass().getResourceAsStream( "/parser.properties" );
+            props.load(is);    
         } catch(IOException e) {
             log.error("Could not load PropertyFile: ", e);
         }
@@ -108,7 +107,24 @@ public class WikiParser {
      * this method returns the Result of the Page as serialized Xml in an InputStream
      * @return WikiXml of Page as InputStream 
      */
-    public InputStream getResultAsInputStream() {
+    public InputStream getInputStream() {
         return this.inputStream;
+    }
+    
+    /**
+     * this method simply prints data from the inputStream into the logfile
+     *
+     */
+    public void debugInputStream() {
+        try {
+            InputStreamReader inR = new InputStreamReader(inputStream);
+            BufferedReader buf = new BufferedReader(inR);
+            String line;
+            while ((line = buf.readLine()) != null) {
+                log.debug(line);
+            }
+        } catch (Exception e) {
+            log.error(e);
+        }
     }
 }
