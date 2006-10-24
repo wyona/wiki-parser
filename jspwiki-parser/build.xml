@@ -72,24 +72,15 @@
     <property name="classes.dir" value="${build.dir}/classes"/>
 
     <path id="classpath.core">
-      <!--fileset dir="lib">
-        <include name="*.jar"/>
-      </fileset-->
       <pathelement path="${maven2.cp}"/>
     </path>
 
     <path id="classpath.examples">
-      <!--fileset dir="lib">
-        <include name="*.jar"/>
-      </fileset-->
       <pathelement path="${classes.dir}"/>
       <pathelement path="${maven2.cp}"/>
     </path>
 
     <path id="classpath.run">
-      <!--fileset dir="lib">
-        <include name="*.jar"/>
-      </fileset-->
       <pathelement path="${classes.dir}"/>
       <pathelement path="properties"/> <!-- log4j.properties -->
       <pathelement path="${maven2.cp}"/>
