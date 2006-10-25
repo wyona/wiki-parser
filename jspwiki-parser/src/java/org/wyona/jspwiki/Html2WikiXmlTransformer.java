@@ -30,7 +30,7 @@ public class Html2WikiXmlTransformer extends DefaultHandler {
      */
     public void startDocument() throws SAXException {
         html2xml = new StringBuffer();
-        html2xml.append("<wiki xmlns:wiki=\""+NAME_SPACE+"\" xmlns=\""+NAME_SPACE+"\"><Paragraph>");
+        html2xml.append("<wiki xmlns:wiki=\""+NAME_SPACE+"\" xmlns=\""+NAME_SPACE+"\">");
     }
 
     /**
@@ -38,7 +38,7 @@ public class Html2WikiXmlTransformer extends DefaultHandler {
      */
     public void endDocument() throws SAXException {
         iterateVector();
-        html2xml.append("</Paragraph></wiki>");
+        html2xml.append("</wiki>");
         log.debug("\n\n--------------\n" + html2xml.toString());
         setResultInputStream();
         //showVectorElements();
@@ -96,7 +96,7 @@ public class Html2WikiXmlTransformer extends DefaultHandler {
         if(tagName.equals("ol")) handleOl();
         if(tagName.equals("ul")) handleUl();
         if(tagName.equals("li")) handleLi(position);
-        if(tagName.equals("br")) ;//do nothing
+        if(tagName.equals("br")) handleBr();
         if(tagName.equals("hr")) handleHr();
         if(tagName.equals("a")) handleA(position);
         if(tagName.equals("span")) handleSpan();
@@ -105,6 +105,8 @@ public class Html2WikiXmlTransformer extends DefaultHandler {
         if(tagName.equals("h2")) handleH2();
         if(tagName.equals("b")) handleB();
         if(tagName.equals("i")) handleI();
+        if(tagName.equals("p")) handleP();
+        if(tagName.equals("u")) handleU();
         if(tagName.equals("tt")) handleTt();
         if(tagName.equals("dl")) handleDl();
         if(tagName.equals("dt")) handleDt();
@@ -113,6 +115,18 @@ public class Html2WikiXmlTransformer extends DefaultHandler {
         //if(tagName.equals("th")) handleTh();
         if(tagName.equals("tr")) handleTr();
         if(tagName.equals("td")) handleTd();
+        if(tagName.equals("p")) handleP();
+        if(tagName.equals("u")) handleU();
+    }
+    
+    /**
+     * this method handles the tag BR
+     *
+     */
+    private void handleBr() {
+        if(startTag) {
+            html2xml.append("<ForceNewLine/>");
+        }
     }
     
     /**
@@ -267,6 +281,31 @@ public class Html2WikiXmlTransformer extends DefaultHandler {
             html2xml.append("</Italic>");
         }
     }
+    
+    /**
+     * this method handles the tag P
+     *
+     */
+    private void handleP() {
+        if(startTag) {
+            html2xml.append("<Paragraph>");
+        } else {
+            html2xml.append("</Paragraph>");
+        }
+    }
+    
+    /**
+     * this method handles the tag U
+     *
+     */
+    private void handleU() {
+        if(startTag) {
+            html2xml.append("<Underline>");
+        } else {
+            html2xml.append("</Underline>");
+        }
+    }
+    
     
     /**
      * this method handles the tag TT
