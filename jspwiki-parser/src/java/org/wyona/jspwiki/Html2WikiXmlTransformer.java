@@ -18,13 +18,10 @@ public class Html2WikiXmlTransformer extends DefaultHandler {
     
     private String listType = "";
     private String tagName = null;
-    private String prevElement = null;
-    private String nextElement = null;
-    private String twoAhead = null;
-    private String twoBack = null;
     private boolean startTag = false;
     private String plain = "";
     
+    private int depth = 0;
     /**
      * this method is called at the begging of the document
      */
@@ -41,8 +38,6 @@ public class Html2WikiXmlTransformer extends DefaultHandler {
         html2xml.append("</wiki>");
         log.debug("\n\n--------------\n" + html2xml.toString());
         setResultInputStream();
-        //showVectorElements();
-        //System.out.println(html2xml.toString());
     }
     
     /**
@@ -50,7 +45,7 @@ public class Html2WikiXmlTransformer extends DefaultHandler {
      * to show which elements have been added
      *
      */
-    private void showVectorElements() {
+    public void showVectorElements() {
         for(int i=0; i<htmlElements.size(); i++) {
             System.out.println((String) htmlElements.elementAt(i));
         }
@@ -88,11 +83,6 @@ public class Html2WikiXmlTransformer extends DefaultHandler {
             handleText(tagName);  
         }
 
-        prevElement = getPreviousElement(position);
-        nextElement = getNextElement(position);
-        twoAhead = get2Ahead(position);
-        twoBack = get2Back(position);
-        
         if(tagName.equals("ol")) handleOl();
         if(tagName.equals("ul")) handleUl();
         if(tagName.equals("li")) handleLi(position);
@@ -134,17 +124,14 @@ public class Html2WikiXmlTransformer extends DefaultHandler {
      *
      */
     private void handleOl() {
-        if(!tagName.equals(prevElement) && 
-           !tagName.equals(nextElement) && 
-           !prevElement.equals("li") &&
-           !tagName.equals(twoAhead)) {
-             listType = "N";
-             String tag = (startTag)? "<" + listType + "List>": "</" + listType + "List>";
-             html2xml.append(tag);    
-         }
-         if(!startTag && !nextElement.equals("ol") && !nextElement.equals("li")) {
-             html2xml.append("</" + listType + "List>");
-         }
+        String tag = null;
+        if(startTag) {
+            listType = "N";
+            tag = "<" + listType + "List>";
+        } else {
+            tag = "</" + listType + "List>";
+        }
+        html2xml.append(tag);
     }
     
     /**
@@ -152,18 +139,15 @@ public class Html2WikiXmlTransformer extends DefaultHandler {
      *
      */
     private void handleUl() {
-        if(!tagName.equals(prevElement) && 
-           !tagName.equals(nextElement) && 
-           !prevElement.equals("li") &&
-           !tagName.equals(twoAhead)) {
-            
-           listType = "B";
-           String tag = (startTag)? "<" + listType + "List>": "</" + listType + "List>";
-           html2xml.append(tag);
+        String tag = null;
+        if(startTag) {
+            listType = "B";
+            tag = "<" + listType + "List>";
+        } else {
+            tag = "</" + listType + "List>";
+            depth = 0;
         }
-        if(!startTag && !nextElement.equals("ul") && !nextElement.equals("li")) {
-            html2xml.append("</" + listType + "List>");
-        }    
+        html2xml.append(tag);
     }
     
     /**
@@ -171,11 +155,14 @@ public class Html2WikiXmlTransformer extends DefaultHandler {
      * @param position of the Vector htmlElements
      */
     private void handleLi(int position) {
-        if(!tagName.equals(twoBack)) {
-            int depth = getListDepth(position);
-            String tag = (startTag)? "<" + listType + "ListItem depth=\"" + depth + "\">": "</" + listType + "ListItem>";
-            html2xml.append(tag);    
+        String tag = null;
+        if(startTag) {
+            depth++;
+            tag = "<" + listType + "ListItem depth=\"" + depth + "\">";
+        } else {
+            tag = "</" + listType + "ListItem>";
         }
+        html2xml.append(tag); 
     }
     
     /**
@@ -194,18 +181,23 @@ public class Html2WikiXmlTransformer extends DefaultHandler {
      */
     private void handleA(int position) {
         if(startTag) {
-            String href = getHrefAttribute(position + 1);
-            html2xml.append("<Link href=\"" + href + "\">");
+            String href = getNextElementAsString(position + 1);
+            String linkLabel = ""; 
+            String label = getNextElementAsString(position + 2);
+            if(!label.startsWith("END_") && !label.equals(href)) {
+                linkLabel = " label=\"" + label + "\"";
+            }
+            html2xml.append("<Link href=\"" + href + "\"" + linkLabel + ">");
         } else {
             html2xml.append("</Link>");
         }
     }
     
     /**
-     * this method will return the href of an link 
+     * this method will return the href or the label of an link 
      *
      */
-    private String getHrefAttribute(int position) {
+    private String getNextElementAsString(int position) {
         return (String) htmlElements.elementAt(position);
     }
     
@@ -306,7 +298,6 @@ public class Html2WikiXmlTransformer extends DefaultHandler {
         }
     }
     
-    
     /**
      * this method handles the tag TT
      *
@@ -400,115 +391,11 @@ public class Html2WikiXmlTransformer extends DefaultHandler {
     private void handleText(String elementName) {
         for(int i = 0; i < elementName.length(); i++) {
             if(elementName.charAt(i) == '\n') {} else
-            if(elementName.charAt(i) == '"') { html2xml.append("<" + elementName + "Text value=\"&#34;\"/>"); } else
-            if(elementName.charAt(i) == '<') { html2xml.append("<" + elementName + "Text value=\"&#60;\"/>"); } else
-            if(elementName.charAt(i) == '>') { html2xml.append("<" + elementName + "Text value=\"&#62;\"/>"); }
+            if(elementName.charAt(i) == '"') { html2xml.append("<" + plain + "Text value=\"&#34;\"/>"); } else
+            if(elementName.charAt(i) == '<') { html2xml.append("<" + plain + "Text value=\"&#60;\"/>"); } else
+            if(elementName.charAt(i) == '>') { html2xml.append("<" + plain + "Text value=\"&#62;\"/>"); }
             else html2xml.append("<" + plain + "Text value=\"" + elementName.charAt(i) + "\"/>");
         }
-    }
-    
-    /**
-     * this method will look what element was called before this one
-     * @param position of Vector htmlElements
-     * @return the tag name
-     */
-    private String getPreviousElement(int position) {
-        try {
-            for(int i=position-1; i>=0; i--) {
-                String element = (String) htmlElements.elementAt(i);
-                if(element.startsWith("START_")) {
-                    element = element.substring(6);
-                }
-                if(element.startsWith("END_")) {
-                    element = element.substring(4);
-                }
-                return element;
-            }    
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
-        return "";
-    }
-    
-    /**
-     * this method will look what tag is next
-     * @param position of Vector htmlElements
-     * @return the tag name
-     */
-    private String getNextElement(int position) {
-        int start = ((position + 1) > htmlElements.size()) ? htmlElements.size(): position + 1;
-        for(int i=start; i<htmlElements.size(); i++) {
-            String element = (String) htmlElements.elementAt(i);
-            if(element.startsWith("START_")) {
-                element = element.substring(6);
-            }
-            if(element.startsWith("END_")) {
-                element = element.substring(4);
-            }
-            return element;
-        }
-        return "";
-    }
-    
-    /**
-     * this method will look 2 Elements ahead in Vector to decide what to do
-     * @param position of Vector htmlElements
-     * @return tag name
-     */
-    private String get2Ahead(int position) {
-        int start = ((position + 1) > htmlElements.size()) ? htmlElements.size(): position + 1;
-        int index = 0;
-        for(int i=start; i<htmlElements.size(); i++) {
-            index++;
-            String element = (String) htmlElements.elementAt(i);
-            if(element.startsWith("START_")) {
-                element = element.substring(6);
-            }
-            if(element.startsWith("END_")) {
-                element = element.substring(4);
-            }
-            if(index == 2)return element;
-        }
-        return "";
-    }
-    
-    /**
-     * this method will look back 2 Elements in the vector to be
-     * able to decide what to do
-     * @param position in Vector htmlElements
-     * @return the tag name
-     */
-    private String get2Back(int position) {
-        int index = 0;
-        for(int i=position-1; i>=0; i--) {
-            index++;
-            String element = (String) htmlElements.elementAt(i);
-            if(element.startsWith("START_")) {
-                element = element.substring(6);
-            }
-            if(element.startsWith("END_")) {
-                element = element.substring(4);
-            }
-            if(index == 2)return element;
-        }
-        return "";
-    }
-    
-    /**
-     * this method will iterate the ul and ol tags and count their occurences 
-     * and set the attribute depth which will show the list depth
-     * @param position of Vector htmlElements
-     * @return the list depth
-     */
-    private int getListDepth(int position) {
-        int depth = 1;
-        for(int i=position+1; i<htmlElements.size(); i++) {
-            String element = (String) htmlElements.elementAt(i);
-            if(element.startsWith("START_li")) depth++;
-            if(!element.startsWith("START_") && !element.startsWith("END_")) 
-            return depth;
-        }
-        return 0;
     }
     
     /**
@@ -521,7 +408,7 @@ public class Html2WikiXmlTransformer extends DefaultHandler {
             htmlElements.add("START_" + eName);
             for(int i=0; i<attrs.getLength(); i++) {
                 if(attrs.getQName(i).equals("href")) {
-                    String href = attrs.getValue(i).substring(14);
+                    String href = attrs.getValue(i);
                     htmlElements.add(href);
                 }
             }
@@ -575,25 +462,5 @@ public class Html2WikiXmlTransformer extends DefaultHandler {
      */
     public String showTransformedXmlAsString() {
         return html2xml.toString();
-    }
-    
-    /**
-     * this method replaces all occurences of '&' but not '&amp;' with '&amp;'
-     * @param inputString with or without '&'
-     * @return replaced ampersands as string
-     */
-    private String replaceAmpersand(String inputString) {
-        String [] tokens = inputString.split("&amp;");
-        String replacedAmpersand = null;
-        if(inputString.indexOf("&amp;") == -1) {
-            replacedAmpersand = inputString.replaceAll("&", "&amp;");
-        } else {
-            replacedAmpersand = "";
-            for(int i = 0; i < tokens.length; i++) {
-                replacedAmpersand += tokens[i].replaceAll("&", "&amp;") + "&amp;";
-            }
-        }
-        log.debug("[" + inputString + "] replaced with [" + replacedAmpersand + "]");
-        return replacedAmpersand;
     }
 }
