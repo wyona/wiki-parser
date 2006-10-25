@@ -18,10 +18,15 @@ public class Html2WikiXmlTransformer extends DefaultHandler {
     
     private String listType = "";
     private String tagName = null;
+    private String prevElement = null;
+    private String nextElement = null;
     private boolean startTag = false;
     private String plain = "";
     
     private int depth = 0;
+    private boolean ignoreClosingBList = false;
+    private boolean ignoreClosingNList = false;
+    private boolean ignoreClosingListItem = false;
     /**
      * this method is called at the begging of the document
      */
@@ -47,7 +52,7 @@ public class Html2WikiXmlTransformer extends DefaultHandler {
      */
     public void showVectorElements() {
         for(int i=0; i<htmlElements.size(); i++) {
-            System.out.println((String) htmlElements.elementAt(i));
+            System.out.println((i+1) + ". " + (String) htmlElements.elementAt(i));
         }
     }
     
@@ -83,6 +88,9 @@ public class Html2WikiXmlTransformer extends DefaultHandler {
             handleText(tagName);  
         }
 
+        prevElement = getPreviousElement(position);
+        nextElement = getNextElement(position);
+        
         if(tagName.equals("ol")) handleOl();
         if(tagName.equals("ul")) handleUl();
         if(tagName.equals("li")) handleLi(position);
@@ -114,9 +122,7 @@ public class Html2WikiXmlTransformer extends DefaultHandler {
      *
      */
     private void handleBr() {
-        if(startTag) {
-            html2xml.append("<ForceNewLine/>");
-        }
+        if(startTag) html2xml.append("<ForceNewLine/>");
     }
     
     /**
@@ -124,14 +130,30 @@ public class Html2WikiXmlTransformer extends DefaultHandler {
      *
      */
     private void handleOl() {
-        String tag = null;
-        if(startTag) {
-            listType = "N";
-            tag = "<" + listType + "List>";
-        } else {
-            tag = "</" + listType + "List>";
+        if(listType.equals("B") && startTag) {
+            html2xml.append("</BListItem></BList>");
+            ignoreClosingBList = true;
+            ignoreClosingListItem = true;
         }
-        html2xml.append(tag);
+        if((!"li".equals(prevElement)) && startTag) {
+            if(listType.equals("N")) {
+                String tag = "</" + listType + "ListItem>";
+                html2xml.append(tag);
+                ignoreClosingListItem = true;
+            } else {
+                listType = "N";
+                String tag = "<" + listType + "List>";
+                html2xml.append(tag);
+            }
+        }
+        if((!"li".equals(nextElement)) && !startTag) {
+            if(ignoreClosingBList) {ignoreClosingBList = false;} 
+            else {
+                String tag = "</" + listType + "List>";
+                html2xml.append(tag);
+            }
+            listType = "";
+        } 
     }
     
     /**
@@ -139,15 +161,33 @@ public class Html2WikiXmlTransformer extends DefaultHandler {
      *
      */
     private void handleUl() {
-        String tag = null;
-        if(startTag) {
-            listType = "B";
-            tag = "<" + listType + "List>";
-        } else {
-            tag = "</" + listType + "List>";
-            depth = 0;
+        if(listType.equals("N") && startTag) {
+            html2xml.append("</NListItem></NList>");
+            ignoreClosingNList = true;
+            ignoreClosingListItem = true;
         }
-        html2xml.append(tag);
+        
+        if(!"li".equals(prevElement) && startTag) {
+            if(listType.equals("B")) {
+                String tag = "</" + listType + "ListItem>";
+                html2xml.append(tag);
+                ignoreClosingListItem = true;
+            } else {
+                listType = "B";
+                String tag = "<" + listType + "List>";
+                html2xml.append(tag);
+            }
+       }
+       
+       if((!"li".equals(nextElement)) && !startTag) {
+           if(ignoreClosingNList) {
+               ignoreClosingNList = false;
+           } else {
+               String tag = "</" + listType + "List>";
+               html2xml.append(tag);    
+           }
+           listType = "";
+       } 
     }
     
     /**
@@ -155,14 +195,31 @@ public class Html2WikiXmlTransformer extends DefaultHandler {
      * @param position of the Vector htmlElements
      */
     private void handleLi(int position) {
-        String tag = null;
         if(startTag) {
             depth++;
-            tag = "<" + listType + "ListItem depth=\"" + depth + "\">";
+            if("ol".equals(nextElement) || "ul".equals(nextElement)) {
+            } else {
+                String tag = "<" + listType + "ListItem depth=\"" + depth + "\">";
+                html2xml.append(tag); 
+            }
         } else {
-            tag = "</" + listType + "ListItem>";
+            if("ol".equals(nextElement) || "ul".equals(nextElement)) {
+                if(ignoreClosingListItem) {
+                    ignoreClosingListItem = false;
+                } else {
+                    String tag = "</" + listType + "ListItem>";
+                    
+                    html2xml.append(tag);  
+                    ignoreClosingListItem = true;
+                    if(ignoreClosingNList) ignoreClosingNList = false;
+                    if(ignoreClosingBList) ignoreClosingBList = false;
+                }
+            } else {
+                String tag = "</" + listType + "ListItem>";
+                html2xml.append(tag); 
+            }
+            depth--;
         }
-        html2xml.append(tag); 
     }
     
     /**
@@ -170,9 +227,7 @@ public class Html2WikiXmlTransformer extends DefaultHandler {
      *
      */
     private void handleHr() {
-        if(startTag) {
-            html2xml.append("<HRule/>");
-        }
+        if(startTag) html2xml.append("<HRule/>");
     }
     
     /**
@@ -207,11 +262,8 @@ public class Html2WikiXmlTransformer extends DefaultHandler {
      *
      */
     private void handleSpan() {
-        if(startTag) {
-            html2xml.append("<Error>");
-        } else {
-            html2xml.append("</Error>");
-        }
+        if(startTag) html2xml.append("<Error>");
+        else html2xml.append("</Error>");
     }
     
     /**
@@ -219,11 +271,8 @@ public class Html2WikiXmlTransformer extends DefaultHandler {
      *
      */
     private void handleH4() {
-        if(startTag) {
-            html2xml.append("<MainMainTitle>");
-        } else {
-            html2xml.append("</MainMainTitle>");
-        }
+        if(startTag) html2xml.append("<MainMainTitle>");
+        else html2xml.append("</MainMainTitle>");
     }
     
     /**
@@ -231,11 +280,8 @@ public class Html2WikiXmlTransformer extends DefaultHandler {
      *
      */
     private void handleH3() {
-        if(startTag) {
-            html2xml.append("<MainTitle>");
-        } else {
-            html2xml.append("</MainTitle>");
-        }
+        if(startTag) html2xml.append("<MainTitle>");
+        else html2xml.append("</MainTitle>");
     }
     
     /**
@@ -243,11 +289,8 @@ public class Html2WikiXmlTransformer extends DefaultHandler {
      *
      */
     private void handleH2() {
-        if(startTag) {
-            html2xml.append("<Title>");
-        } else {
-            html2xml.append("</Title>");
-        }
+        if(startTag) html2xml.append("<Title>");
+        else html2xml.append("</Title>");
     }
     
     /**
@@ -255,11 +298,8 @@ public class Html2WikiXmlTransformer extends DefaultHandler {
      *
      */
     private void handleB() {
-        if(startTag) {
-            html2xml.append("<Bold>");
-        } else {
-            html2xml.append("</Bold>");
-        }
+        if(startTag) html2xml.append("<Bold>");
+        else html2xml.append("</Bold>");
     }
     
     /**
@@ -267,11 +307,8 @@ public class Html2WikiXmlTransformer extends DefaultHandler {
      *
      */
     private void handleI() {
-        if(startTag) {
-            html2xml.append("<Italic>");
-        } else {
-            html2xml.append("</Italic>");
-        }
+        if(startTag) html2xml.append("<Italic>");
+        else html2xml.append("</Italic>");
     }
     
     /**
@@ -279,11 +316,8 @@ public class Html2WikiXmlTransformer extends DefaultHandler {
      *
      */
     private void handleP() {
-        if(startTag) {
-            html2xml.append("<Paragraph>");
-        } else {
-            html2xml.append("</Paragraph>");
-        }
+        if(startTag) html2xml.append("<Paragraph>");
+        else html2xml.append("</Paragraph>");
     }
     
     /**
@@ -291,12 +325,10 @@ public class Html2WikiXmlTransformer extends DefaultHandler {
      *
      */
     private void handleU() {
-        if(startTag) {
-            html2xml.append("<Underline>");
-        } else {
-            html2xml.append("</Underline>");
-        }
+        if(startTag) html2xml.append("<Underline>");
+        else html2xml.append("</Underline>");
     }
+    
     
     /**
      * this method handles the tag TT
@@ -317,11 +349,8 @@ public class Html2WikiXmlTransformer extends DefaultHandler {
      *
      */
     private void handleDl() {
-        if(startTag) {
-            html2xml.append("<DefinitionList>");
-        } else {
-            html2xml.append("</DefinitionList>");
-        }
+        if(startTag) html2xml.append("<DefinitionList>"); 
+        else html2xml.append("</DefinitionList>");
     }
     
     /**
@@ -329,11 +358,8 @@ public class Html2WikiXmlTransformer extends DefaultHandler {
      *
      */
     private void handleDt() {
-        if(startTag) {
-            html2xml.append("<Term>");
-        } else {
-            html2xml.append("</Term>");
-        }
+        if(startTag) html2xml.append("<Term>");
+        else html2xml.append("</Term>");
     }
     
     /**
@@ -341,11 +367,8 @@ public class Html2WikiXmlTransformer extends DefaultHandler {
      *
      */
     private void handleDd() {
-        if(startTag) {
-            html2xml.append("<Definition>");
-        } else {
-            html2xml.append("</Definition>");
-        }
+        if(startTag) html2xml.append("<Definition>"); 
+        else html2xml.append("</Definition>");
     }
     
     /**
@@ -353,11 +376,8 @@ public class Html2WikiXmlTransformer extends DefaultHandler {
      *
      */
     private void handleTable() {
-        if(startTag) {
-            html2xml.append("<Table>");
-        } else {
-            html2xml.append("</Table>");
-        }
+        if(startTag) html2xml.append("<Table>"); 
+        else html2xml.append("</Table>");
     }
     
     /**
@@ -365,11 +385,8 @@ public class Html2WikiXmlTransformer extends DefaultHandler {
      *
      */
     private void handleTr() {
-        if(startTag) {
-            html2xml.append("<TableRow>");
-        } else {
-            html2xml.append("</TableRow>");
-        }
+        if(startTag) html2xml.append("<TableRow>");
+        else html2xml.append("</TableRow>");
     }
     
     /**
@@ -377,11 +394,8 @@ public class Html2WikiXmlTransformer extends DefaultHandler {
      *
      */
     private void handleTd() {
-        if(startTag) {
-            html2xml.append("<TableCol>");
-        } else {
-            html2xml.append("</TableCol>");
-        }
+        if(startTag) html2xml.append("<TableCol>");
+        else html2xml.append("</TableCol>");
     }
     
     /**
@@ -396,6 +410,41 @@ public class Html2WikiXmlTransformer extends DefaultHandler {
             if(elementName.charAt(i) == '>') { html2xml.append("<" + plain + "Text value=\"&#62;\"/>"); }
             else html2xml.append("<" + plain + "Text value=\"" + elementName.charAt(i) + "\"/>");
         }
+    }
+    
+    /**
+     * this method will look what element was called before this one
+     * @param position of Vector htmlElements
+     * @return the tag name
+     */
+    private String getPreviousElement(int position) {
+        try {
+            for(int i=position-1; i>=0; i--) {
+                String element = (String) htmlElements.elementAt(i);
+                if(element.startsWith("START_")) element = element.substring(6);
+                if(element.startsWith("END_")) element = element.substring(4);
+                return element;
+            }    
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+    
+    /**
+     * this method will look what tag is next
+     * @param position of Vector htmlElements
+     * @return the tag name
+     */
+    private String getNextElement(int position) {
+        int start = ((position + 1) > htmlElements.size()) ? htmlElements.size(): position + 1;
+        for(int i=start; i<htmlElements.size(); i++) {
+            String element = (String) htmlElements.elementAt(i);
+            if(element.startsWith("START_")) element = element.substring(6);
+            if(element.startsWith("END_")) element = element.substring(4);
+            return element;
+        }
+        return "";
     }
     
     /**
@@ -437,7 +486,7 @@ public class Html2WikiXmlTransformer extends DefaultHandler {
      */
     public void characters(char[] buf, int offset, int len) throws SAXException {
         String value = new String(buf, offset, len);
-        htmlElements.add(value);
+        if(!value.equals("\n")) htmlElements.add(value);
     }
 
     /**
