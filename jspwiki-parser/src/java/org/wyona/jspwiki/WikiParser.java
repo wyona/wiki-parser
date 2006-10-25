@@ -50,7 +50,6 @@ public class WikiParser extends org.wyona.wikiparser.WikiParser {
     
     public void parse(InputStream inputStream) {
         transformHtml2Xml();
-        getInputStream();
     }
     
     /**
@@ -74,8 +73,8 @@ public class WikiParser extends org.wyona.wikiparser.WikiParser {
             StringBuffer createdHtml = new StringBuffer();
             createdHtml.append("<html><body>");
             createdHtml.append(engine.textToHTML(context, stringBuffer.toString()));
-            createdHtml.append("<html><body>");
-
+            createdHtml.append("</body></html>");
+            log.debug(createdHtml.toString());
             Html2WikiXmlTransformer html2WikiXml = new Html2WikiXmlTransformer();
             SAXParser saxParser = SAXParserFactory.newInstance().newSAXParser();
             saxParser.parse(new java.io.ByteArrayInputStream(createdHtml.toString().getBytes()), html2WikiXml);
