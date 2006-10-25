@@ -13,7 +13,9 @@ import javax.xml.parsers.SAXParserFactory;
 
 import org.apache.log4j.Category;
 
-import com.ecyrd.jspwiki.TestEngine;
+import com.ecyrd.jspwiki.WikiContext;
+import com.ecyrd.jspwiki.WikiEngine;
+import com.ecyrd.jspwiki.WikiPage;
 
 /**
  *
@@ -22,7 +24,7 @@ public class WikiParser extends org.wyona.wikiparser.WikiParser {
     private static Category log = Category.getInstance(WikiParser.class);
     
     private InputStream inputStream = null;
-    private Properties props = null;
+    private Properties properties = null;
     
     public WikiParser(InputStream is) {
         init(is);
@@ -57,25 +59,26 @@ public class WikiParser extends org.wyona.wikiparser.WikiParser {
      */
     private void transformHtml2Xml() {
         try {
+            InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+            
+            WikiEngine engine = new WikiEngine(properties);
+            WikiPage page = new WikiPage(engine, "PAGE");
+            WikiContext context = new WikiContext(engine, page);
+            
+            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+            String line = null;
+            StringBuffer stringBuffer = new StringBuffer();
+            while ((line = bufferedReader.readLine()) != null) {
+                stringBuffer.append(line + "\n");                
+            }
             StringBuffer createdHtml = new StringBuffer();
             createdHtml.append("<html><body>");
-            InputStreamReader inR = new InputStreamReader(inputStream);
-            BufferedReader bufferedReader = new BufferedReader(inR);
-            TestEngine engine = new TestEngine(props);
-            String line = null;
-            while ((line = bufferedReader.readLine()) != null) {
-                line = bufferedReader.readLine();
-                if(line != null) {
-                    line += "\\\\";
-                    engine.saveText("NAME", line);
-                    createdHtml.append(engine.getHTML("NAME"));                   
-                }
-            }
-            createdHtml.append("</body></html>");
+            createdHtml.append(engine.textToHTML(context, stringBuffer.toString()));
+            createdHtml.append("<html><body>");
+
             Html2WikiXmlTransformer html2WikiXml = new Html2WikiXmlTransformer();
             SAXParser saxParser = SAXParserFactory.newInstance().newSAXParser();
             saxParser.parse(new java.io.ByteArrayInputStream(createdHtml.toString().getBytes()), html2WikiXml);
-            log.debug(html2WikiXml.showTransformedXmlAsString());
             setResultAsInputStream(html2WikiXml.getInputStream());
         } catch(Exception e) {
             log.error(e);
@@ -87,9 +90,9 @@ public class WikiParser extends org.wyona.wikiparser.WikiParser {
      */
     private void loadProperties() {
         try {
-            props = new Properties();
+            properties = new Properties();
             InputStream is = getClass().getResourceAsStream( "/parser.properties" );
-            props.load(is);    
+            properties.load(is);    
         } catch(IOException e) {
             log.error("Could not load PropertyFile: ", e);
         }
