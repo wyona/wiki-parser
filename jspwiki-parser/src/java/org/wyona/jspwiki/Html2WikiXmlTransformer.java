@@ -18,15 +18,9 @@ public class Html2WikiXmlTransformer extends DefaultHandler {
     
     private String listType = "";
     private String tagName = null;
-    private String prevElement = null;
-    private String nextElement = null;
     private boolean startTag = false;
     private String plain = "";
     
-    private int depth = 0;
-    private boolean ignoreClosingBList = false;
-    private boolean ignoreClosingNList = false;
-    private boolean ignoreClosingListItem = false;
     /**
      * this method is called at the begging of the document
      */
@@ -88,9 +82,6 @@ public class Html2WikiXmlTransformer extends DefaultHandler {
             handleText(tagName);  
         }
 
-        prevElement = getPreviousElement(position);
-        nextElement = getNextElement(position);
-        
         if(tagName.equals("ol")) handleOl();
         if(tagName.equals("ul")) handleUl();
         if(tagName.equals("li")) handleLi(position);
@@ -130,30 +121,15 @@ public class Html2WikiXmlTransformer extends DefaultHandler {
      *
      */
     private void handleOl() {
-        if(listType.equals("B") && startTag) {
-            html2xml.append("</BListItem></BList>");
-            ignoreClosingBList = true;
-            ignoreClosingListItem = true;
-        }
-        if((!"li".equals(prevElement)) && startTag) {
-            if(listType.equals("N")) {
-                String tag = "</" + listType + "ListItem>";
-                html2xml.append(tag);
-                ignoreClosingListItem = true;
-            } else {
-                listType = "N";
-                String tag = "<" + listType + "List>";
-                html2xml.append(tag);
-            }
-        }
-        if((!"li".equals(nextElement)) && !startTag) {
-            if(ignoreClosingBList) {ignoreClosingBList = false;} 
-            else {
-                String tag = "</" + listType + "List>";
-                html2xml.append(tag);
-            }
+        if(startTag) {
+            listType = "N";
+            String tag = "<" + listType + "List>";
+            html2xml.append(tag);
+        } else {
+            String tag = "</" + listType + "List>";
+            html2xml.append(tag);
             listType = "";
-        } 
+        }
     }
     
     /**
@@ -161,33 +137,15 @@ public class Html2WikiXmlTransformer extends DefaultHandler {
      *
      */
     private void handleUl() {
-        if(listType.equals("N") && startTag) {
-            html2xml.append("</NListItem></NList>");
-            ignoreClosingNList = true;
-            ignoreClosingListItem = true;
+        if(startTag) {
+            listType = "B";
+            String tag = "<" + listType + "List>";
+            html2xml.append(tag);
+        } else {
+            String tag = "</" + listType + "List>";
+            html2xml.append(tag);
+            listType = "";
         }
-        
-        if(!"li".equals(prevElement) && startTag) {
-            if(listType.equals("B")) {
-                String tag = "</" + listType + "ListItem>";
-                html2xml.append(tag);
-                ignoreClosingListItem = true;
-            } else {
-                listType = "B";
-                String tag = "<" + listType + "List>";
-                html2xml.append(tag);
-            }
-       }
-       
-       if((!"li".equals(nextElement)) && !startTag) {
-           if(ignoreClosingNList) {
-               ignoreClosingNList = false;
-           } else {
-               String tag = "</" + listType + "List>";
-               html2xml.append(tag);    
-           }
-           listType = "";
-       } 
     }
     
     /**
@@ -196,29 +154,12 @@ public class Html2WikiXmlTransformer extends DefaultHandler {
      */
     private void handleLi(int position) {
         if(startTag) {
-            depth++;
-            if("ol".equals(nextElement) || "ul".equals(nextElement)) {
-            } else {
-                String tag = "<" + listType + "ListItem depth=\"" + depth + "\">";
-                html2xml.append(tag); 
-            }
+            String depth = getNextElementAsString(position + 1);
+            String tag = "<" + listType + "ListItem depth=\"" + depth + "\">";
+            html2xml.append(tag); 
         } else {
-            if("ol".equals(nextElement) || "ul".equals(nextElement)) {
-                if(ignoreClosingListItem) {
-                    ignoreClosingListItem = false;
-                } else {
-                    String tag = "</" + listType + "ListItem>";
-                    
-                    html2xml.append(tag);  
-                    ignoreClosingListItem = true;
-                    if(ignoreClosingNList) ignoreClosingNList = false;
-                    if(ignoreClosingBList) ignoreClosingBList = false;
-                }
-            } else {
-                String tag = "</" + listType + "ListItem>";
-                html2xml.append(tag); 
-            }
-            depth--;
+            String tag = "</" + listType + "ListItem>";
+            html2xml.append(tag); 
         }
     }
     
@@ -413,41 +354,6 @@ public class Html2WikiXmlTransformer extends DefaultHandler {
     }
     
     /**
-     * this method will look what element was called before this one
-     * @param position of Vector htmlElements
-     * @return the tag name
-     */
-    private String getPreviousElement(int position) {
-        try {
-            for(int i=position-1; i>=0; i--) {
-                String element = (String) htmlElements.elementAt(i);
-                if(element.startsWith("START_")) element = element.substring(6);
-                if(element.startsWith("END_")) element = element.substring(4);
-                return element;
-            }    
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
-        return "";
-    }
-    
-    /**
-     * this method will look what tag is next
-     * @param position of Vector htmlElements
-     * @return the tag name
-     */
-    private String getNextElement(int position) {
-        int start = ((position + 1) > htmlElements.size()) ? htmlElements.size(): position + 1;
-        for(int i=start; i<htmlElements.size(); i++) {
-            String element = (String) htmlElements.elementAt(i);
-            if(element.startsWith("START_")) element = element.substring(6);
-            if(element.startsWith("END_")) element = element.substring(4);
-            return element;
-        }
-        return "";
-    }
-    
-    /**
      * this method will be called whenever a start tag is processed
      */
     public void startElement(String namespaceURI, String localName, String qName, Attributes attrs) throws SAXException {
@@ -457,6 +363,10 @@ public class Html2WikiXmlTransformer extends DefaultHandler {
             htmlElements.add("START_" + eName);
             for(int i=0; i<attrs.getLength(); i++) {
                 if(attrs.getQName(i).equals("href")) {
+                    String href = attrs.getValue(i);
+                    htmlElements.add(href);
+                }
+                if(attrs.getQName(i).equals("depth")) {
                     String href = attrs.getValue(i);
                     htmlElements.add(href);
                 }
