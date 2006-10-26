@@ -113,7 +113,7 @@ public class Html2WikiXmlTransformer extends DefaultHandler {
      *
      */
     private void handleBr() {
-        if(startTag) html2xml.append("<ForceNewLine/>");
+        if(startTag) html2xml.append("<ForceNewline/>");
     }
     
     /**
@@ -155,6 +155,8 @@ public class Html2WikiXmlTransformer extends DefaultHandler {
     private void handleLi(int position) {
         if(startTag) {
             String depth = getNextElementAsString(position + 1);
+            //remove this element 
+            htmlElements.remove(position+1);
             String tag = "<" + listType + "ListItem depth=\"" + depth + "\">";
             html2xml.append(tag); 
         } else {
@@ -168,7 +170,7 @@ public class Html2WikiXmlTransformer extends DefaultHandler {
      *
      */
     private void handleHr() {
-        if(startTag) html2xml.append("<HRule/>");
+        if(startTag) html2xml.append("<Hrule/>");
     }
     
     /**
@@ -367,8 +369,8 @@ public class Html2WikiXmlTransformer extends DefaultHandler {
                     htmlElements.add(href);
                 }
                 if(attrs.getQName(i).equals("depth")) {
-                    String href = attrs.getValue(i);
-                    htmlElements.add(href);
+                    String depth = attrs.getValue(i);
+                    htmlElements.add(depth);
                 }
             }
         }

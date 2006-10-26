@@ -98,14 +98,13 @@ public class WikiParser extends org.wyona.wikiparser.WikiParser {
             }
             
             XMLOutputter outputter = new XMLOutputter();
-            
             String modifiedHtml = outputter.outputString(doc);
-            System.out.println("###" + modifiedHtml + "\n\n");
+            log.debug("####################################");
+            log.debug(modifiedHtml);
+            log.debug("####################################");
             Html2WikiXmlTransformer html2WikiXml = new Html2WikiXmlTransformer();
             SAXParser saxParser = SAXParserFactory.newInstance().newSAXParser();
-            //saxParser.parse(new java.io.ByteArrayInputStream(createdHtml.toString().getBytes()), html2WikiXml);
             saxParser.parse(new java.io.ByteArrayInputStream(modifiedHtml.getBytes()), html2WikiXml);
-            
             setResultAsInputStream(html2WikiXml.getInputStream());
         } catch(Exception e) {
             e.printStackTrace();
