@@ -180,6 +180,8 @@ public class Html2WikiXmlTransformer extends DefaultHandler {
     private void handleA(int position) {
         if(startTag) {
             String href = getNextElementAsString(position + 1);
+            String defaultNotExistingLink = "Edit.jsp?page="; 
+            if(href.indexOf(defaultNotExistingLink) != -1) href = href.substring(defaultNotExistingLink.length());
             String linkLabel = ""; 
             String label = getNextElementAsString(position + 2);
             if(!label.startsWith("END_") && !label.equals(href)) {
