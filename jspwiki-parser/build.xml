@@ -58,7 +58,7 @@
                   version="1.x"/>
 
       <dependency groupId="wyona-org-wiki-parser" artifactId="jsp-wiki-parser"
-                  version="r19645"/>
+                  version="r19702"/>
       <dependency groupId="wyona-org-wiki-parser" artifactId="wiki-parser-factory"
                   version="r19560"/>
 
