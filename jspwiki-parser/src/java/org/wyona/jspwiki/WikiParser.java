@@ -79,10 +79,17 @@ public class WikiParser extends org.wyona.wikiparser.WikiParser {
             while ((line = bufferedReader.readLine()) != null) {
                 stringBuffer.append(line + "\n");                
             }
+            log.debug("\n************************************");
+            log.debug(stringBuffer.toString());
+            log.debug("\n************************************");
             StringBuffer createdHtml = new StringBuffer();
             createdHtml.append("<html><body>");
             createdHtml.append(engine.textToHTML(context, stringBuffer.toString()));
             createdHtml.append("</body></html>");
+            
+            log.debug("####################################");
+            log.debug(createdHtml.toString());
+            log.debug("####################################");
             
             ByteArrayInputStream inStream = new ByteArrayInputStream(createdHtml.toString().getBytes());
             SAXBuilder builder = new SAXBuilder();

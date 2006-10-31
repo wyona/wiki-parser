@@ -96,7 +96,7 @@ public class Html2WikiXmlTransformer extends DefaultHandler {
         if(tagName.equals("i")) handleI();
         if(tagName.equals("p")) handleP();
         if(tagName.equals("u")) handleU();
-        if(tagName.equals("tt")) handleTt();
+        if(tagName.equals("pre")) handlePre();
         if(tagName.equals("dl")) handleDl();
         if(tagName.equals("dt")) handleDt();
         if(tagName.equals("dd")) handleDd();
@@ -180,8 +180,8 @@ public class Html2WikiXmlTransformer extends DefaultHandler {
     private void handleA(int position) {
         if(startTag) {
             String href = getNextElementAsString(position + 1);
-            String defaultNotExistingLink = "Edit.jsp?page="; 
-            if(href.indexOf(defaultNotExistingLink) != -1) href = href.substring(defaultNotExistingLink.length());
+            //String defaultNotExistingLink = "Edit.jsp?page="; 
+            //if(href.indexOf(defaultNotExistingLink) != -1) href = href.substring(defaultNotExistingLink.length());
             String linkLabel = ""; 
             String label = getNextElementAsString(position + 2);
             if(!label.startsWith("END_") && !label.equals(href)) {
@@ -276,10 +276,10 @@ public class Html2WikiXmlTransformer extends DefaultHandler {
     
     
     /**
-     * this method handles the tag TT
+     * this method handles the tag PRE
      *
      */
-    private void handleTt() {
+    private void handlePre() {
         if(startTag) {
             html2xml.append("<Plain>");
             plain = "Plain";
@@ -349,7 +349,13 @@ public class Html2WikiXmlTransformer extends DefaultHandler {
      */
     private void handleText(String elementName) {
         for(int i = 0; i < elementName.length(); i++) {
-            if(elementName.charAt(i) == '\n') {} else
+            if(elementName.charAt(i) == '\n') {
+                if(elementName.equals("pre")) {
+                    //html2xml.append("<ForceNewline/>");    
+                } else {
+                    html2xml.append("\n");
+                }
+            } else
             if(elementName.charAt(i) == '"') { html2xml.append("<" + plain + "Text value=\"&#34;\"/>"); } else
             if(elementName.charAt(i) == '<') { html2xml.append("<" + plain + "Text value=\"&#60;\"/>"); } else
             if(elementName.charAt(i) == '>') { html2xml.append("<" + plain + "Text value=\"&#62;\"/>"); }
@@ -400,7 +406,7 @@ public class Html2WikiXmlTransformer extends DefaultHandler {
      */
     public void characters(char[] buf, int offset, int len) throws SAXException {
         String value = new String(buf, offset, len);
-        if(!value.equals("\n")) htmlElements.add(value);
+        htmlElements.add(value);
     }
 
     /**
