@@ -1,5 +1,9 @@
-./build.sh compile
 
-./build.sh clean
+   README
+   ------
+  
+   Optional: ./build.sh clean
 
-./build.sh run-examples
+   ./build.sh jar
+
+   ./build.sh test
