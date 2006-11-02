@@ -1,0 +1,15 @@
+--- JSPWiki-2.4.71/src/com/ecyrd/jspwiki/parser/JSPWikiMarkupParser.java	2006-10-12 22:59:24.000000000 +0200
++++ JSPWiki-2.4.71/src/com/ecyrd/jspwiki/parser/JSPWikiMarkupParser.java	2006-11-01 10:06:48.000000000 +0100
+@@ -412,9 +412,9 @@
+                 break;
+ 
+             case EDIT:
+-                el = new Element("a").setAttribute("class",CLASS_EDITPAGE);
+-                el.setAttribute("title","Create '"+link+"'");
+-                el.setAttribute("href", m_context.getURL(WikiContext.EDIT,link));
++                el = new Element("a");//.setAttribute("class",CLASS_EDITPAGE);
++                //el.setAttribute("title","Create '"+link+"'");
++                el.setAttribute("href", link);//m_context.getURL(WikiContext.EDIT,link));
+                 el.addContent(text);
+                 break;
+ 

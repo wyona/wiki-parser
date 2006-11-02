@@ -1,0 +1,49 @@
+<project name="JSPWikiParser" default="jar" basedir=".">
+  
+  <property name="JSPWikiVersion" value="2.4.71"/>
+  <property name="classes.dir" value="classes"/>
+  
+  <target name="patch">
+    <echo>patching JSPWiki-${JSPWikiVersion}</echo>
+    <property name="patch.dir" value="JSPWiki-${JSPWikiVersion}/src/com/ecyrd/jspwiki"/>
+    <patch patchfile="AuthenticationManager.patch" originalfile="${patch.dir}/auth/AuthenticationManager.java"/>
+    <patch patchfile="JSPWikiMarkupParser.patch"   originalfile="${patch.dir}/parser/JSPWikiMarkupParser.java"/>
+    <patch patchfile="MarkupParser.patch"          originalfile="${patch.dir}/parser/MarkupParser.java"/>
+    <patch patchfile="UserManager.patch"           originalfile="${patch.dir}/auth/UserManager.java"/>
+    <patch patchfile="WikiEngine.patch"            originalfile="${patch.dir}/WikiEngine.java"/>
+    <patch patchfile="XMLGroupDatabase.patch"      originalfile="${patch.dir}/auth/authorize/XMLGroupDatabase.java"/>
+  </target>
+  
+  <target name="compile" depends="patch">
+    <echo>compiling JSPWiki-${JSPWikiVersion}</echo>
+    <path id="classpath">
+      <fileset dir="JSPWiki-${JSPWikiVersion}/lib">
+        <include name="*.jar"/>
+      </fileset>
+    </path>
+    <mkdir dir="${classes.dir}"/>
+    <javac srcdir="JSPWiki-${JSPWikiVersion}/src" destdir="${classes.dir}" debug="true">
+      <classpath refid="classpath"/>
+    </javac>
+  </target>
+  
+  <target name="jar" depends="compile">
+    <echo>creating JSPWiki-${JSPWikiVersion}-patched.jar</echo>
+    <jar destfile="./JSPWiki-${JSPWikiVersion}-patched.jar" basedir="${classes.dir}"/>
+    <!-- <delete dir="${classes.dir}"/> -->
+  </target>
+  
+  <!-- 
+  <target name="jar">
+    <jar destfile="JSPWiki-${JSPWikiVersion}-patched.jar" basedir=".">
+      <include name="build"/>
+      <manifest>
+        <attribute name="Built-By" value="wyona.com"/>
+        <section name="org.wyona.jspwiki.WikiParser"/>
+      </manifest>
+    </jar>
+    <delete dir="${classes.dir}"/>
+  </target>
+  -->
+  
+</project>

@@ -1,0 +1,20 @@
+--- JSPWiki-2.4.71/src/com/ecyrd/jspwiki/auth/AuthenticationManager.java	2006-10-06 11:19:16.000000000 +0200
++++ JSPWiki-2.4.71/src/com/ecyrd/jspwiki/auth/AuthenticationManager.java	2006-11-02 09:45:40.000000000 +0100
+@@ -153,7 +153,7 @@
+             }
+             catch ( SecurityException e)
+             {
+-                log.error("Could not configure JAAS: " + e.getMessage());
++                log.info("Ingoring: Could not configure JAAS: " + e.getMessage());
+             }
+         }
+         else
+@@ -173,7 +173,7 @@
+             }
+             catch ( SecurityException e)
+             {
+-                log.error("Could not install security policy: " + e.getMessage());
++                log.info("Ignoring: Could not install security policy: " + e.getMessage());
+             }
+         }
+     }

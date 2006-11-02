@@ -1,0 +1,11 @@
+--- JSPWiki-2.4.71/src/com/ecyrd/jspwiki/auth/authorize/XMLGroupDatabase.java	2006-09-25 05:33:36.000000000 +0200
++++ JSPWiki-2.4.71/src/com/ecyrd/jspwiki/auth/authorize/XMLGroupDatabase.java	2006-11-02 09:46:28.000000000 +0100
+@@ -234,7 +234,7 @@
+         String file = props.getProperty( PROP_DATABASE );
+         if ( file == null )
+         {
+-            log.error( "XML group database property " + PROP_DATABASE + " not found; trying " + defaultFile );
++            log.info( "Ignoring: XML group database property " + PROP_DATABASE + " not found; trying " + defaultFile );
+             c_file = defaultFile;
+         }
+         else

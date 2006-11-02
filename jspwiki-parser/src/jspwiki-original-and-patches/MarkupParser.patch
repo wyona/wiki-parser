@@ -1,0 +1,11 @@
+--- JSPWiki-2.4.71/src/com/ecyrd/jspwiki/parser/MarkupParser.java	2006-10-12 22:59:52.000000000 +0200
++++ JSPWiki-2.4.71/src/com/ecyrd/jspwiki/parser/MarkupParser.java	2006-11-01 09:58:23.000000000 +0100
+@@ -252,7 +252,7 @@
+             {
+                 // Is a letter
+                 
+-                if( isWord ) ch = Character.toUpperCase( ch );
++                if( isWord ) ch = ch;//Character.toUpperCase( ch );
+                 clean.append( ch );
+                 isWord = false;
+             }

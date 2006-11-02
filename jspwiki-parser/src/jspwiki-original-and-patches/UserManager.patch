@@ -1,0 +1,11 @@
+--- JSPWiki-2.4.71/src/com/ecyrd/jspwiki/auth/UserManager.java	2006-09-09 20:41:00.000000000 +0200
++++ JSPWiki-2.4.71/src/com/ecyrd/jspwiki/auth/UserManager.java	2006-11-02 09:47:01.000000000 +0100
+@@ -124,7 +124,7 @@
+         }
+         catch( NoRequiredPropertyException e )
+         {
+-            log.error( "You have not set the '"+PROP_DATABASE+"'. You need to do this if you want to enable user management by JSPWiki." );
++            log.info( "Ignoring: You have not set the '"+PROP_DATABASE+"'. You need to do this if you want to enable user management by JSPWiki." );
+         }
+         catch( ClassNotFoundException e )
+         {

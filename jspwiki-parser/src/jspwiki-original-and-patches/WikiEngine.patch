@@ -1,0 +1,10 @@
+--- JSPWiki-2.4.71/src/com/ecyrd/jspwiki/WikiEngine.java	2006-10-06 00:25:18.000000000 +0200
++++ JSPWiki-2.4.71/src/com/ecyrd/jspwiki/WikiEngine.java	2006-10-31 16:16:56.000000000 +0100
+@@ -936,6 +936,7 @@
+      */
+     public String getInterWikiURL( String wikiName )
+     {
++        try{throw new Exception();}catch(Exception e) {System.out.println("##" + wikiName + "##");e.printStackTrace();}
+         return TextUtil.getStringProperty(m_properties,PROP_INTERWIKIREF+wikiName,null);
+     }
+ 

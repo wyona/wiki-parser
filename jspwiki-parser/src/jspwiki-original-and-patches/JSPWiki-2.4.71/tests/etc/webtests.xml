@@ -1,0 +1,164 @@
+<project name="JSPWiki-webtests" basedir="tests">
+
+  <!-- This Ant build file is designed to be called by the
+       "webtest-setup" macro in the top-level build.xml file.
+       If executed by itself, it will fail horribly and make
+       many unpleasant noises. It runs tests against a local
+       Tomcat web application server running on port 8080.
+       
+       The tests require a few properties to be defined 
+       by the calling Ant script:
+       
+         webtest.context:  The webapp context that will be tested.
+                           This will be something like
+                           'test-custom' or 'test-container'.
+         webtest.props:    The jspwiki.properties file to use for the test.
+         webtest.webxml:   The web.xml file to use for the test.
+         webtest.teardown: If not set, leaves WARs deployed on
+                           the app server, and does not undeploy
+                           them. This property is optional.
+                       
+       The test scripts are written using JWebUnit, and reside
+       in tests/com/ecyrd/jspwiki/web.
+       
+       For those of you following along at home, there are
+       some fairly black-belt Ant tricks in here,
+       notably the code that packages up the web contexts.  -->
+       
+  <!-- Checks to see if the context is already deployed -->
+  <target name="webtest-setup-init">
+    <condition property="context.installed">
+      <http url="http://localhost:8080/${webtest.context}/Wiki.jsp" />
+    </condition>
+  </target>
+  
+  <!-- The main target. Calls the init target and deploys webapp if needed -->
+  <target name="webtest-setup"
+    depends="webtest-setup-init" unless="context.installed">
+    <echo message="Test context ${webtest.context} not deployed. Deploying..."/>
+    <tomcat-deploy context="${webtest.context}"
+                    webxml="${webtest.webxml}"
+                     props="${webtest.props}" />
+  </target>
+    
+  <!-- Tears down the web tests -->
+  <target name="webtest-teardown" if="webtest.teardown">
+    <tomcat-undeploy context="${webtest.context}" />
+  </target>
+  
+	<!-- ============================================================== -->
+  
+  <!-- Tomcat deployment tasks -->
+  
+  <!-- These macros deploy and undeploy WAR files to a Tomcat
+       server, assumed to be already running locally on port 8080.
+       The manager app MUST be installed and running in order for
+       this to work properly. Also, the 'tomcat.admin' and
+       'tomcat.password' properties must be set in build.properties.
+       To run these macros, calling tasks must have already
+       run the task 'tomcat-init'.
+  -->
+  <macrodef name="tomcat-deploy">
+    <attribute name="context" />
+    <attribute name="webxml" />
+    <attribute name="props" />
+    <sequential>
+      <!-- We need the tomcat.admin and tomcat.password properties -->
+      <check-property prop="tomcat.admin" />
+      <check-property prop="tomcat.password" />
+    
+      <!-- Declare the Tomcat deploy task -->
+      <taskdef classname="org.apache.catalina.ant.DeployTask" name="deploy">
+        <classpath>
+          <path refid="tomcat.classpath" /> 
+        </classpath> 
+      </taskdef>
+      
+      <!-- Create a context file for Tomcat -->
+      <mkdir dir="${tests.build}/@{context}" />
+      <copy flatten="true" 
+        file="tests/etc/tomcat/context-@{context}.xml"
+        toFile="${tests.build}/@{context}/context.xml">
+        <filterset>
+          <filter token="docBase" 
+            value="${tests.build}/@{context}/@{context}.war" />
+          <filtersfile file="tests/etc/jspwiki.properties" />
+          <filtersfile file="build.properties" />
+        </filterset>
+      </copy>
+           
+      <!-- Create a page/log directory and point jspwiki.properties to it -->
+      <mkdir dir="${tests.build}/@{context}/wikipages" />
+      <copy toDir="${tests.build}/@{context}/wikipages" flatten="true" >
+        <fileset dir="src/wikipages">
+          <include name="Main.*" />
+          <include name="LeftMenu*.*" />
+          <include name="About.*" />
+          <include name="RecentChanges.*" />
+          <include name="WikiEtiquette.*" />
+          <include name="UnusedPages.*" />
+          <include name="UndefinedPages.*" />
+          <include name="PageIndex.*" />
+        </fileset>
+      </copy>
+      <copy file="@{props}" toFile="${tests.build}/@{context}/jspwiki.properties" flatten="true" />
+      <propertyfile file="${tests.build}/@{context}/jspwiki.properties">
+        <entry key="jspwiki.fileSystemProvider.pageDir" 
+             value="${basedir}/${tests.build}/@{context}/wikipages" />
+        <entry key="jspwiki.basicAttachmentProvider.storageDir" 
+             value="${basedir}/${tests.build}/@{context}/wikipages" />
+        <entry key="log4j.appender.FileLog.File" 
+             value="${basedir}/${tests.build}/@{context}/jspwiki.log" />
+      </propertyfile>
+      
+      <!-- Copy our sample user database -->
+      <copy file="tests/etc/userdatabase.xml"
+          toFile="${tests.build}/@{context}/userdatabase.xml" />
+      
+      <!-- Build the war -->
+      <war warfile="${tests.build}/@{context}/@{context}.war"
+           webxml="@{webxml}">
+         <lib dir="lib" includes="*.jar"
+           excludes="servlet.jar,junit.jar,servlet-api.jar,jsp-api.jar,hsqldb.jar,httpunit*.jar,jwebunit*.jar"/>
+         <lib file="${jarfile}" />
+         <lib file="${jdbc.driver.jar}" />
+         <fileset dir="${code.src}/webdocs" includes="**" />
+         <webinf dir="etc" 
+           includes="**" 
+           excludes="jspwiki.properties userdatabase.xml db/** **.tmpl web.xml" />
+         <webinf dir="${tests.build}/@{context}" 
+           includes="jspwiki.properties userdatabase.xml" />
+         <classes dir="etc" includes="oscache.properties" />
+         <metainf dir="${tests.build}/@{context}" includes="context.xml" />
+      </war>
+      
+      <!-- Deploy the webapp -->
+      <deploy url="http://localhost:8080/manager/" 
+        username="${tomcat.admin}" password="${tomcat.password}"
+        path="/@{context}"
+        war="file:///${basedir}/${tests.build}/@{context}/@{context}.war" />
+    </sequential>
+  </macrodef>
+ 
+  <macrodef name="tomcat-undeploy">
+    <attribute name="context" />
+    <sequential>
+      <!-- We need the tomcat.admin and tomcat.password properties -->
+      <check-property prop="tomcat.admin" />
+      <check-property prop="tomcat.password" />
+    
+      <!-- Declare the Tomcat deploy task -->
+      <taskdef classname="org.apache.catalina.ant.UndeployTask" name="undeploy">
+        <classpath>
+          <path refid="tomcat.classpath" /> 
+        </classpath> 
+      </taskdef>
+      
+      <!-- Undeploy the webapp -->
+      <undeploy url="http://localhost:8080/manager/" 
+        username="${tomcat.admin}" password="${tomcat.password}"
+        path="/@{context}" />
+    </sequential>
+  </macrodef>
+  
+</project>
