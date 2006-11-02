@@ -412,9 +412,9 @@ public class JSPWikiMarkupParser
                 break;
 
             case EDIT:
-                el = new Element("a");//.setAttribute("class",CLASS_EDITPAGE);
-                //el.setAttribute("title","Create '"+link+"'");
-                el.setAttribute("href", link);//m_context.getURL(WikiContext.EDIT,link));
+                el = new Element("a").setAttribute("class",CLASS_EDITPAGE);
+                el.setAttribute("title","Create '"+link+"'");
+                el.setAttribute("href", m_context.getURL(WikiContext.EDIT,link));
                 el.addContent(text);
                 break;
 

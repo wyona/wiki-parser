@@ -124,7 +124,7 @@ public final class UserManager
         }
         catch( NoRequiredPropertyException e )
         {
-            log.info( "Ignoring: You have not set the '"+PROP_DATABASE+"'. You need to do this if you want to enable user management by JSPWiki." );
+            log.error( "You have not set the '"+PROP_DATABASE+"'. You need to do this if you want to enable user management by JSPWiki." );
         }
         catch( ClassNotFoundException e )
         {

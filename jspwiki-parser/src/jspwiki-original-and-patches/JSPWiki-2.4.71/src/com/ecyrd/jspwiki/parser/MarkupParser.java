@@ -252,7 +252,7 @@ public abstract class MarkupParser
             {
                 // Is a letter
                 
-                if( isWord ) ch = ch;//Character.toUpperCase( ch );
+                if( isWord ) ch = Character.toUpperCase( ch );
                 clean.append( ch );
                 isWord = false;
             }

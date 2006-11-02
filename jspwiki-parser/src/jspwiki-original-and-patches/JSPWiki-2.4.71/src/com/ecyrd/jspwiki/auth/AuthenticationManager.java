@@ -153,7 +153,7 @@ public final class AuthenticationManager
             }
             catch ( SecurityException e)
             {
-                log.info("Ingoring: Could not configure JAAS: " + e.getMessage());
+                log.error("Could not configure JAAS: " + e.getMessage());
             }
         }
         else
@@ -173,7 +173,7 @@ public final class AuthenticationManager
             }
             catch ( SecurityException e)
             {
-                log.info("Ignoring: Could not install security policy: " + e.getMessage());
+                log.error("Could not install security policy: " + e.getMessage());
             }
         }
     }

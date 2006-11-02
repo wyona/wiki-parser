@@ -936,7 +936,6 @@ public class WikiEngine
      */
     public String getInterWikiURL( String wikiName )
     {
-        try{throw new Exception();}catch(Exception e) {System.out.println("##" + wikiName + "##");e.printStackTrace();}
         return TextUtil.getStringProperty(m_properties,PROP_INTERWIKIREF+wikiName,null);
     }
 
