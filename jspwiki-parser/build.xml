@@ -10,7 +10,6 @@
   <target name="init" description="Init all parameters and other settings">
     <property file="local.build.properties"/>
     <property file="build.properties"/>
-    <mkdir dir="${logs.dir}"/>
     <artifact:remoteRepository id="wyona.remote.repository" url="http://www.wyona.org/maven2/"/>
 
     <artifact:dependencies pathId="maven2.classpath" filesetId="maven2.fileset">
