@@ -9,6 +9,6 @@
       - Run ant
 
    2) Build Html2WikiXML library
-      - Optional: ./build.sh clean
+      - ./build.sh clean (OPTIONAL)
       - ./build.sh jar
       - ./build.sh test
