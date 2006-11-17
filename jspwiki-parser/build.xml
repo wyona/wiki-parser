@@ -121,28 +121,28 @@
   <target name="jar" description="Create a jar file" depends="init,compile">
     <mkdir dir="build/lib"/>
 
+    <copy file="src/jar/parser.properties" todir="build/classes"/>
+
     <jar
-      destfile="build/lib/yarep-${yarep.version}-r${subversion.revision}.jar"
+      destfile="build/lib/jsp-wiki-parser-${jspwiki-parser.version}-r${subversion.revision}.jar"
       basedir="build/classes"
       excludes="org/wyona/yarep/examples/**,yarep.properties"
     >
-    <!--
       <manifest>
-        <attribute name="main-class" value="org.wyona.yarep.examples.HelloWorld"/>
+        <attribute name="main-class" value="org.wyona.jspwiki.WikiParser"/>
       </manifest>
-    -->
     </jar>
   </target>
 
   <target name="install-jar" description="Place jar into local maven repository" depends="init,jar">
     <copy file="pom.xml" todir="build/lib"/>
-    <replace file="build/lib/pom.xml" value="${yarep.version}-r${subversion.revision}">
+    <replace file="build/lib/pom.xml" value="${jspwiki-parser.version}-r${subversion.revision}">
       <replacetoken>@VERSION@</replacetoken>
     </replace>
 
     <artifact:pom id="maven.project" file="build/lib/pom.xml"/>
   
-    <artifact:install file="build/lib/yarep-${yarep.version}-r${subversion.revision}.jar">
+    <artifact:install file="build/lib/jsp-wiki-parser-${jspwiki-parser.version}-r${subversion.revision}.jar">
       <pom refid="maven.project"/>
     </artifact:install>
   </target>
