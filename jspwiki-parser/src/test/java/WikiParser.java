@@ -28,7 +28,7 @@ import com.ecyrd.jspwiki.WikiException;
 import com.ecyrd.jspwiki.WikiPage;
 
 
-public class WikiParser {
+public class TestJspWikiParser {
     
     private Properties properties = null;
     private String pathToWikiFile = "examples/test.txt";

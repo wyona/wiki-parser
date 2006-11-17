@@ -373,7 +373,13 @@ public class Html2WikiXmlTransformer extends DefaultHandler {
             htmlElements.add("START_" + eName);
             for(int i=0; i<attrs.getLength(); i++) {
                 if(attrs.getQName(i).equals("href")) {
-                    String href = attrs.getValue(i);
+                    String external = "";
+                    for(int j=0; j<attrs.getLength(); j++) {
+                        if(attrs.getQName(j).equals("class") && attrs.getValue(j).equals("external")) {
+                            external = "external_";
+                        }
+                    }
+                    String href = external + attrs.getValue(i);
                     htmlElements.add(href);
                 }
                 if(attrs.getQName(i).equals("depth")) {
