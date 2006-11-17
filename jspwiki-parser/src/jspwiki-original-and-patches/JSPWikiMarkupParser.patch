@@ -1,15 +1,28 @@
---- JSPWiki-2.4.71/src/com/ecyrd/jspwiki/parser/JSPWikiMarkupParser.java	2006-10-12 22:59:24.000000000 +0200
-+++ JSPWiki-2.4.71/src/com/ecyrd/jspwiki/parser/JSPWikiMarkupParser.java	2006-11-01 10:06:48.000000000 +0100
-@@ -412,9 +412,9 @@
-                 break;
+Index: JSPWiki-2.4.71/src/com/ecyrd/jspwiki/parser/JSPWikiMarkupParser.java
+===================================================================
+--- JSPWiki-2.4.71/src/com/ecyrd/jspwiki/parser/JSPWikiMarkupParser.java	(Revision 20060)
++++ JSPWiki-2.4.71/src/com/ecyrd/jspwiki/parser/JSPWikiMarkupParser.java	(Arbeitskopie)
+@@ -413,8 +413,12 @@
  
              case EDIT:
--                el = new Element("a").setAttribute("class",CLASS_EDITPAGE);
+                 el = new Element("a").setAttribute("class",CLASS_EDITPAGE);
 -                el.setAttribute("title","Create '"+link+"'");
 -                el.setAttribute("href", m_context.getURL(WikiContext.EDIT,link));
-+                el = new Element("a");//.setAttribute("class",CLASS_EDITPAGE);
 +                //el.setAttribute("title","Create '"+link+"'");
-+                el.setAttribute("href", link);//m_context.getURL(WikiContext.EDIT,link));
++                String plainLink = m_context.getURL(WikiContext.EDIT,link);
++                if(plainLink.startsWith("Edit.jsp?page=")) {
++                    plainLink = plainLink.substring(14);
++                }
++                el.setAttribute("href", plainLink);
                  el.addContent(text);
                  break;
  
+@@ -1367,7 +1371,7 @@
+                 }
+                 else
+                 {
+-                    makeLink( ATTACHMENT, attachment, link, null );
++                    makeLink( EDIT, reallink, link, null );
+                 }
+             }
+             else if( (hashMark = reallink.indexOf('#')) != -1 )

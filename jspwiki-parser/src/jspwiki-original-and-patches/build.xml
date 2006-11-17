@@ -1,49 +1,49 @@
-<project name="JSPWikiParser" default="jar" basedir=".">
-  
-  <property name="JSPWikiVersion" value="2.4.71"/>
+<project name="JSPWikiParser" default="clean-up" basedir=".">
+
+  <property file="local.build.properties"/>
+  <property file="build.properties"/>  
+  <property name="version" value="2.4.71"/>
   <property name="classes.dir" value="classes"/>
-  
+  <property name="patch.dir" value="JSPWiki-${version}/src/com/ecyrd/jspwiki"/>
+
   <target name="patch">
-    <echo>patching JSPWiki-${JSPWikiVersion}</echo>
-    <property name="patch.dir" value="JSPWiki-${JSPWikiVersion}/src/com/ecyrd/jspwiki"/>
-    <patch patchfile="AuthenticationManager.patch" originalfile="${patch.dir}/auth/AuthenticationManager.java"/>
-    <patch patchfile="JSPWikiMarkupParser.patch"   originalfile="${patch.dir}/parser/JSPWikiMarkupParser.java"/>
-    <patch patchfile="MarkupParser.patch"          originalfile="${patch.dir}/parser/MarkupParser.java"/>
-    <patch patchfile="UserManager.patch"           originalfile="${patch.dir}/auth/UserManager.java"/>
-    <patch patchfile="WikiEngine.patch"            originalfile="${patch.dir}/WikiEngine.java"/>
-    <patch patchfile="XMLGroupDatabase.patch"      originalfile="${patch.dir}/auth/authorize/XMLGroupDatabase.java"/>
+    <property name="patch.dir" value="JSPWiki-${version}/src/com/ecyrd/jspwiki"/>
+    <patch patchfile="UserManager.patch"            originalfile="${patch.dir}/auth/UserManager.java"/>
+    <patch patchfile="AuthenticationManager.patch"  originalfile="${patch.dir}/auth/AuthenticationManager.java"/>
+    <patch patchfile="XMLGroupDatabase.patch"       originalfile="${patch.dir}/auth/authorize/XMLGroupDatabase.java"/>
+    <patch patchfile="WebContainerAuthorizer.patch" originalfile="${patch.dir}/auth/authorize/WebContainerAuthorizer.java"/>
+    <patch patchfile="MarkupParser.patch"           originalfile="${patch.dir}/parser/MarkupParser.java"/>
+    <patch patchfile="JSPWikiMarkupParser.patch"    originalfile="${patch.dir}/parser/JSPWikiMarkupParser.java"/>
   </target>
-  
+
   <target name="compile" depends="patch">
-    <echo>compiling JSPWiki-${JSPWikiVersion}</echo>
     <path id="classpath">
-      <fileset dir="JSPWiki-${JSPWikiVersion}/lib">
+      <fileset dir="JSPWiki-${version}/lib">
         <include name="*.jar"/>
       </fileset>
     </path>
     <mkdir dir="${classes.dir}"/>
-    <javac srcdir="JSPWiki-${JSPWikiVersion}/src" destdir="${classes.dir}" debug="true">
+    <javac srcdir="JSPWiki-${version}/src" destdir="${classes.dir}" debug="true">
       <classpath refid="classpath"/>
     </javac>
   </target>
-  
+
   <target name="jar" depends="compile">
-    <echo>creating JSPWiki-${JSPWikiVersion}-patched.jar</echo>
-    <jar destfile="./JSPWiki-${JSPWikiVersion}-patched.jar" basedir="${classes.dir}"/>
-    <!-- <delete dir="${classes.dir}"/> -->
-  </target>
-  
-  <!-- 
-  <target name="jar">
-    <jar destfile="JSPWiki-${JSPWikiVersion}-patched.jar" basedir=".">
-      <include name="build"/>
-      <manifest>
-        <attribute name="Built-By" value="wyona.com"/>
-        <section name="org.wyona.jspwiki.WikiParser"/>
-      </manifest>
-    </jar>
+    <jar destfile="./JSPWiki-patched-${version}.jar" basedir="${classes.dir}"/>
     <delete dir="${classes.dir}"/>
   </target>
-  -->
-  
+
+  <target name="clean-up" depends="jar">
+    <move file="./JSPWiki-patched-${version}.jar" tofile="${maven2.repository}/com-ecyrd-jspwiki/JSPWiki-patched/2.4.71/JSPWiki-patched-${version}.jar"/>
+    <echo>IMPORTANT: update the maven repository server as well ;)</echo>
+    <exec dir="." executable="svn">
+      <arg value="revert"/>
+      <arg value="${patch.dir}/auth/UserManager.java"/>
+      <arg value="${patch.dir}/auth/AuthenticationManager.java"/>
+      <arg value="${patch.dir}/auth/authorize/XMLGroupDatabase.java"/>
+      <arg value="${patch.dir}/auth/authorize/WebContainerAuthorizer.java"/>
+      <arg value="${patch.dir}/parser/MarkupParser.java"/>
+      <arg value="${patch.dir}/parser/JSPWikiMarkupParser.java"/>
+    </exec>
+  </target>
 </project>

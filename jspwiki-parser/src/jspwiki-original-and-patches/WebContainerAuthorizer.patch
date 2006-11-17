@@ -1,0 +1,21 @@
+Index: JSPWiki-2.4.71/src/com/ecyrd/jspwiki/auth/authorize/WebContainerAuthorizer.java
+===================================================================
+--- JSPWiki-2.4.71/src/com/ecyrd/jspwiki/auth/authorize/WebContainerAuthorizer.java	(Revision 20072)
++++ JSPWiki-2.4.71/src/com/ecyrd/jspwiki/auth/authorize/WebContainerAuthorizer.java	(Arbeitskopie)
+@@ -322,6 +322,7 @@
+      */
+     protected Document getWebXml() throws JDOMException, IOException
+     {
++        /*
+         URL url;
+         SAXBuilder builder = new SAXBuilder();
+         builder.setValidation( false );
+@@ -346,6 +347,8 @@
+         log.debug( "Processing web.xml at " + url.toExternalForm() );
+         doc = builder.build( url );
+         return doc;
++        */
++        return null;
+     }
+     
+     /**
