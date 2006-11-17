@@ -1,9 +1,14 @@
 
    README
    ------
-  
-   Optional: ./build.sh clean
 
-   ./build.sh jar
+   1) Build Patched JSPWiki library
+      - cd src/jspwiki-original-and-patches
+      - copy build.properties to local.build.properties
+      - Edit your maven2 repository path within local.build.properties
+      - Run ant
 
-   ./build.sh test
+   2) Build Html2WikiXML library
+      - Optional: ./build.sh clean
+      - ./build.sh jar
+      - ./build.sh test
