@@ -37,13 +37,7 @@
     <move file="./JSPWiki-patched-${version}.jar" tofile="${maven2.repository}/com-ecyrd-jspwiki/JSPWiki-patched/2.4.71/JSPWiki-patched-${version}.jar"/>
     <echo>IMPORTANT: update the maven repository server as well ;)</echo>
     <exec dir="." executable="svn">
-      <arg value="revert"/>
-      <arg value="${patch.dir}/auth/UserManager.java"/>
-      <arg value="${patch.dir}/auth/AuthenticationManager.java"/>
-      <arg value="${patch.dir}/auth/authorize/XMLGroupDatabase.java"/>
-      <arg value="${patch.dir}/auth/authorize/WebContainerAuthorizer.java"/>
-      <arg value="${patch.dir}/parser/MarkupParser.java"/>
-      <arg value="${patch.dir}/parser/JSPWikiMarkupParser.java"/>
+      <arg line="revert -R ."/>
     </exec>
   </target>
 </project>
