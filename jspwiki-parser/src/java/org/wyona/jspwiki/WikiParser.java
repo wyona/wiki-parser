@@ -35,38 +35,35 @@ public class WikiParser extends org.wyona.wikiparser.WikiParser {
     private Properties properties = null;
     private Element bodyElement = null; 
     
-    public WikiParser(InputStream is) {
-        init(is);
+    /**
+     * DefaultConstructor
+     *
+     */
+    public WikiParser() {
     }
     
     /**
-     *
+     * main method 
      */
     public static void main(String[] args) {
+        /*
         FileInputStream fstream;
         try {
             fstream = new FileInputStream(args[0]);
-            new WikiParser(fstream);
+            WikiParser wikiParser = new WikiParser();
         } catch (FileNotFoundException e) {
             log.error(e);
-        }
-    }
-    
-    private void init(InputStream is) {
-        inputStream = is;
-        loadProperties();
-    }    
-    
-    public void parse(InputStream inputStream) {
-        transformHtml2Xml();
+        }*/
+        new WikiParser();
     }
     
     /**
      * this method does mainly the job it reads the file from the repository transform it to 
      * html and calls the Html2WikiXmlTransformer to create a wiki xml file which can be edited with yulup
      */
-    private void transformHtml2Xml() {
+    public void parse(InputStream inputStream) {
         try {
+            loadProperties();
             InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
             
             WikiEngine engine = new WikiEngine(properties);
@@ -118,6 +115,11 @@ public class WikiParser extends org.wyona.wikiparser.WikiParser {
         }
     }
     
+    /**
+     * this method flats the lists and adds depth attributes instead
+     * @param node
+     * @param counter
+     */
     public void treeWalker(Content node, int counter) {
         if(node instanceof Element) {
             Element element = (Element) node;
@@ -141,6 +143,11 @@ public class WikiParser extends org.wyona.wikiparser.WikiParser {
         }
     }
     
+    /**
+     * this method moves the elements so that 
+     * @param element
+     * @param name
+     */
     public void moveElement(Element element, String name) {
         int position = 0;
         Vector keepThisKids = new Vector();
@@ -170,6 +177,11 @@ public class WikiParser extends org.wyona.wikiparser.WikiParser {
         //TODO handle this bug DONT know where to attach this 
     }
     
+    /**
+     * this method walks up to the root element which is in our case the body element 
+     * @param element
+     * @return actual rootchild
+     */
     public Element getActualRootsChild(Element element) {
         if(element.getParentElement().equals(bodyElement)) return element;
         else return getActualRootsChild(element.getParentElement());
