@@ -9,6 +9,12 @@
 </description>
 <dependencies>
   <dependency>
+    <groupId>wyona-org-wiki-parser</groupId>
+    <artifactId>wiki-parser-factory</artifactId>
+    <version>r19560</version>
+    <type>jar</type>
+  </dependency>
+  <dependency>
     <groupId>javacc</groupId>
     <artifactId>javacc</artifactId>
     <version>3.2</version>

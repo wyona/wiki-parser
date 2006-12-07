@@ -21,8 +21,8 @@
 
   <goal name="wikiparser:generate">
     <echo>Generating the Wiki Parser</echo>
-    <ant:copy file="${wikiparser.src.dir}/java/org/wyona/wiki/SimpleNode.java"
-      toDir="target/generated-src/main/java/" overwrite="yes"/>
+    <ant:copy file="${wikiparser.src.dir}/java/org/wyona/wiki/SimpleNode.java" toDir="target/generated-src/main/java/" overwrite="yes"/>
+    <ant:copy file="${wikiparser.src.dir}/java/org/wyona/wiki/Wiki2XML.java" toDir="target/generated-src/main/java/" overwrite="yes"/>
     <attainGoal name="javacc:jjtree-generate"/>    
     <attainGoal name="javacc:javacc-generate"/>
   </goal>

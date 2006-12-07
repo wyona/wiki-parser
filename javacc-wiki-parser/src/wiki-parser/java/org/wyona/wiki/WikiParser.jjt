@@ -18,6 +18,12 @@ import java.io.*;
 
 public class WikiParser {    
 
+    private static WikiParserTokenManager wikiParserTokenManager = null;
+    private InputStream inputStream = null; 
+    
+    //default constructor
+    public WikiParser() {}
+    
     public static void main(String args[]) {
      
      WikiParser wikiParser = null;
@@ -25,23 +31,36 @@ public class WikiParser {
      try {            
       
          if (args.length == 1) {
-             wikiParser = new WikiParser(new WikiParserTokenManager(new SimpleCharStream(
-                 new InputStreamReader(new FileInputStream(args[0]), "UTF-8")))); 
-         } else {           
-             wikiParser = new WikiParser(new WikiParserTokenManager(new SimpleCharStream(
-                 new InputStreamReader(System.in, "UTF-8")))); 
-         }        
-        
-         SimpleNode n = wikiParser.WikiBody();     
-         debugNodeTree(n, 0);            
-        
-     } catch (ParseException e) {
-            System.out.println(e.getMessage());
-            e.printStackTrace();                   
-        } catch (Exception e) {            
+             wikiParser = new WikiParser();
+             wikiParser.init(new WikiParserTokenManager(new SimpleCharStream(new InputStreamReader(new FileInputStream(args[0]), "UTF-8"))));
+         } else {
+             wikiParser = new WikiParser();
+             wikiParserTokenManager = new WikiParserTokenManager(new SimpleCharStream(new InputStreamReader(System.in, "UTF-8")));
+             wikiParser.init(new WikiParserTokenManager(new SimpleCharStream(new InputStreamReader(System.in, "UTF-8"))));
+         }
+         SimpleNode n = wikiParser.WikiBody();
+         debugNodeTree(n, 0);
+        } catch (Exception e) {
             e.printStackTrace();
         }
-    } 
+    }
+
+    /**
+     * 
+     */
+    public static void init(WikiParserTokenManager wptm) {
+        wikiParserTokenManager = wptm;
+    }
+    
+    /**
+     * 
+     */
+    public void init(InputStream inputStream) {
+        //this.inputStream = inputStream;
+        wikiParserTokenManager = new WikiParserTokenManager(new SimpleCharStream(new InputStreamReader(inputStream)));
+        System.err.println("tokenManager is " + wikiParserTokenManager);
+        init(wikiParserTokenManager);
+    }
     
     /**
     *     This method will output the node tree to the console.
@@ -196,12 +215,12 @@ TOKEN: {
 
 <DEFAULT> 
 TOKEN: {
-    <START_PLAIN: "{{"> : IN_PLAIN
+    <START_PLAIN: "{{{"> : IN_PLAIN
 }
 
 <IN_PLAIN>
 TOKEN: {
-    <END_PLAIN: "}}"> : DEFAULT
+    <END_PLAIN: "}}}"> : DEFAULT
 |   <PLAIN_ANY_CHAR: ~[]>
 }
 
@@ -587,12 +606,12 @@ String Text() :
 }
 {
     (
-        t = <NOTAGS_ANY_CHAR>    { jjtThis.setOption("value", t.image); } |
-        t = <LIST_ANY_CHAR>        { jjtThis.setOption("value", t.image); } | 
-        t = <TITLE_ANY_CHAR>    { jjtThis.setOption("value", t.image); } | 
-        t = <TABLE_ANY_CHAR>    { jjtThis.setOption("value", t.image); } |
-        t = <LINK_ANY_CHAR>        { jjtThis.setOption("value", t.image); } |    
-        t = <ANY_CHAR>            { jjtThis.setOption("value", t.image); }         
+        t = <NOTAGS_ANY_CHAR>    { jjtThis.setOption("value", t.image.replaceAll("\"", "&#34;")); } |
+        t = <LIST_ANY_CHAR>        { jjtThis.setOption("value", t.image.replaceAll("\"", "&#34;")); } | 
+        t = <TITLE_ANY_CHAR>    { jjtThis.setOption("value", t.image.replaceAll("\"", "&#34;")); } | 
+        t = <TABLE_ANY_CHAR>    { jjtThis.setOption("value", t.image.replaceAll("\"", "&#34;")); } |
+        t = <LINK_ANY_CHAR>        { jjtThis.setOption("value", t.image.replaceAll("\"", "&#34;")); } |    
+        t = <ANY_CHAR>            { jjtThis.setOption("value", t.image.replaceAll("\"", "&#34;")); }         
     )
     { 
         return t.image; 
