@@ -1,5 +1,16 @@
---- JSPWiki-2.4.71/src/com/ecyrd/jspwiki/parser/MarkupParser.java	2006-10-12 22:59:52.000000000 +0200
-+++ JSPWiki-2.4.71/src/com/ecyrd/jspwiki/parser/MarkupParser.java	2006-11-01 09:58:23.000000000 +0100
+Index: JSPWiki-2.4.71/src/com/ecyrd/jspwiki/parser/MarkupParser.java
+===================================================================
+--- JSPWiki-2.4.71/src/com/ecyrd/jspwiki/parser/MarkupParser.java	(Revision 20728)
++++ JSPWiki-2.4.71/src/com/ecyrd/jspwiki/parser/MarkupParser.java	(Arbeitskopie)
+@@ -67,7 +67,7 @@
+     /** Lists all punctuation characters allowed in WikiMarkup. These
+         will not be cleaned away. */
+     
+-    protected static final String           PUNCTUATION_CHARS_ALLOWED = "._";
++    protected static final String           PUNCTUATION_CHARS_ALLOWED = "._-";//added a dash so links like hello-world.html would be shown as expected
+ 
+     protected MarkupParser( WikiContext context, Reader in )
+     {
 @@ -252,7 +252,7 @@
              {
                  // Is a letter
