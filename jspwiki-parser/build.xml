@@ -155,7 +155,7 @@
     <property name="home.dir" location="."/>
     <java classname="org.wyona.jspwiki.WikiParser">
       <classpath refid="classpath.run"/>
-      <arg value="${home.dir}/src/testfiles/test.txt"/>
+      <arg value="${home.dir}/src/test/examples/test.txt"/>
     </java>
   </target>
 
