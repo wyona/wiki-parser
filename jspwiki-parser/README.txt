@@ -11,4 +11,4 @@
    2) Build Html2WikiXML library
       - ./build.sh clean (OPTIONAL)
       - ./build.sh jar
-      - ./build.sh test
+      - ./build.sh run-examples
