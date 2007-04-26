@@ -21,6 +21,7 @@ import org.jdom.Element;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.XMLOutputter;
 
+import com.ecyrd.jspwiki.TextUtil;
 import com.ecyrd.jspwiki.WikiContext;
 import com.ecyrd.jspwiki.WikiEngine;
 import com.ecyrd.jspwiki.WikiPage;
@@ -89,7 +90,7 @@ public class WikiParser extends org.wyona.wikiparser.WikiParser {
             log.debug("\n************************************");
             StringBuffer createdHtml = new StringBuffer();
             createdHtml.append("<html><body>");
-            createdHtml.append(engine.textToHTML(context, stringBuffer.toString()));
+            createdHtml.append(engine.textToHTML(context, TextUtil.replaceEntities(stringBuffer.toString())));
             createdHtml.append("</body></html>");
             
             log.debug("####################################");
