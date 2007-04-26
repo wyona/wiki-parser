@@ -96,6 +96,12 @@
            classpathref="classpath.core"
            debug="true"
     />
+
+    <copy todir="build/classes">
+      <fileset dir="src/jar"/>
+    </copy>
+    <mkdir dir="build/logs"/>
+
   </target>
 
 <!--
@@ -121,12 +127,10 @@
   <target name="jar" description="Create a jar file" depends="init,compile">
     <mkdir dir="build/lib"/>
 
-    <copy file="src/jar/parser.properties" todir="build/classes"/>
-
     <jar
       destfile="build/lib/jsp-wiki-parser-${jspwiki-parser.version}-r${subversion.revision}.jar"
       basedir="build/classes"
-      excludes="org/wyona/yarep/examples/**,yarep.properties"
+      excludes="org/wyona/yarep/examples/**,WEB-INF**"
     >
       <manifest>
         <attribute name="main-class" value="org.wyona.jspwiki.WikiParser"/>
