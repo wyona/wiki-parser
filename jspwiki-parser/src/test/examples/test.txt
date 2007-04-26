@@ -16,3 +16,9 @@ __text__
 {{text}}
 ;term:def
 |text|more text|
+&
+'
+"
+<
+>
+ä
