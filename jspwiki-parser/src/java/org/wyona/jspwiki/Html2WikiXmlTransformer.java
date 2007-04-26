@@ -82,30 +82,32 @@ public class Html2WikiXmlTransformer extends DefaultHandler {
             handleText(tagName);  
         }
 
-        if(tagName.equals("ol")) handleOl();
-        if(tagName.equals("ul")) handleUl();
-        if(tagName.equals("li")) handleLi(position);
-        if(tagName.equals("br")) handleBr();
-        if(tagName.equals("hr")) handleHr();
-        if(tagName.equals("a")) handleA(position);
-        if(tagName.equals("span")) handleSpan();
-        if(tagName.equals("h4")) handleH4();
-        if(tagName.equals("h3")) handleH3();
-        if(tagName.equals("h2")) handleH2();
-        if(tagName.equals("b")) handleB();
-        if(tagName.equals("i")) handleI();
-        if(tagName.equals("p")) handleP();
-        if(tagName.equals("u")) handleU();
-        if(tagName.equals("pre")) handlePre();
-        if(tagName.equals("dl")) handleDl();
-        if(tagName.equals("dt")) handleDt();
-        if(tagName.equals("dd")) handleDd();
-        if(tagName.equals("table")) handleTable();
-        //if(tagName.equals("th")) handleTh();
-        if(tagName.equals("tr")) handleTr();
-        if(tagName.equals("td")) handleTd();
-        if(tagName.equals("p")) handleP();
-        if(tagName.equals("u")) handleU();
+        if(elementName.startsWith("START_") || elementName.startsWith("END_")) {
+            if(tagName.equals("ol")) handleOl();
+            if(tagName.equals("ul")) handleUl();
+            if(tagName.equals("li")) handleLi(position);
+            if(tagName.equals("br")) handleBr();
+            if(tagName.equals("hr")) handleHr();
+            if(tagName.equals("a")) handleA(position);
+            if(tagName.equals("span")) handleSpan();
+            if(tagName.equals("h4")) handleH4();
+            if(tagName.equals("h3")) handleH3();
+            if(tagName.equals("h2")) handleH2();
+            if(tagName.equals("b")) handleB();
+            if(tagName.equals("i")) handleI();
+            if(tagName.equals("p")) handleP();
+            if(tagName.equals("u")) handleU();
+            if(tagName.equals("pre")) handlePre();
+            if(tagName.equals("dl")) handleDl();
+            if(tagName.equals("dt")) handleDt();
+            if(tagName.equals("dd")) handleDd();
+            if(tagName.equals("table")) handleTable();
+            //if(tagName.equals("th")) handleTh();
+            if(tagName.equals("tr")) handleTr();
+            if(tagName.equals("td")) handleTd();
+            if(tagName.equals("p")) handleP();
+            if(tagName.equals("u")) handleU();
+        }
     }
     
     /**
@@ -356,6 +358,8 @@ public class Html2WikiXmlTransformer extends DefaultHandler {
                     html2xml.append("\n");
                 }
             } else
+            if(elementName.charAt(i) == '&') { html2xml.append("<" + plain + "Text value=\"&#38;\"/>"); } else
+            if(elementName.charAt(i) == '\'') { html2xml.append("<" + plain + "Text value=\"&#39;\"/>"); } else
             if(elementName.charAt(i) == '"') { html2xml.append("<" + plain + "Text value=\"&#34;\"/>"); } else
             if(elementName.charAt(i) == '<') { html2xml.append("<" + plain + "Text value=\"&#60;\"/>"); } else
             if(elementName.charAt(i) == '>') { html2xml.append("<" + plain + "Text value=\"&#62;\"/>"); }
