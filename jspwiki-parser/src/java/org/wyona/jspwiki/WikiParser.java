@@ -46,15 +46,23 @@ public class WikiParser extends org.wyona.wikiparser.WikiParser {
      * main method 
      */
     public static void main(String[] args) {
-        /*
+        
         FileInputStream fstream;
         try {
+            System.out.println("File: " + args[0]);
             fstream = new FileInputStream(args[0]);
             WikiParser wikiParser = new WikiParser();
-        } catch (FileNotFoundException e) {
-            log.error(e);
-        }*/
-        new WikiParser();
+            wikiParser.parse(fstream);
+            InputStream is = wikiParser.getInputStream();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                System.out.println(line);
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+            e.printStackTrace();
+        }
     }
     
     /**
@@ -74,7 +82,7 @@ public class WikiParser extends org.wyona.wikiparser.WikiParser {
             String line = null;
             StringBuffer stringBuffer = new StringBuffer();
             while ((line = bufferedReader.readLine()) != null) {
-                stringBuffer.append(line + "\n");                
+                stringBuffer.append(line + "\n");
             }
             log.debug("\n************************************");
             log.debug(stringBuffer.toString());
