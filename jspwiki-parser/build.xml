@@ -98,7 +98,7 @@
     />
 
     <copy todir="build/classes">
-      <fileset dir="src/jar"/>
+      <fileset dir="src/misc"/>
     </copy>
     <mkdir dir="build/logs"/>
 
