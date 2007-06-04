@@ -117,7 +117,7 @@ public class WikiParser extends org.wyona.wikiparser.WikiParser {
             log.debug("####################################");
             Html2WikiXmlTransformer html2WikiXml = new Html2WikiXmlTransformer();
             SAXParser saxParser = SAXParserFactory.newInstance().newSAXParser();
-            saxParser.parse(new java.io.ByteArrayInputStream(modifiedHtml.getBytes()), html2WikiXml);
+            saxParser.parse(new java.io.ByteArrayInputStream(modifiedHtml.getBytes("UTF-8")), html2WikiXml);
             setResultAsInputStream(html2WikiXml.getInputStream());
         } catch(Exception e) {
             e.printStackTrace();
