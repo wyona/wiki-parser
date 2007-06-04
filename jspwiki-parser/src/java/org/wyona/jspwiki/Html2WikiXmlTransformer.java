@@ -1,6 +1,7 @@
 package org.wyona.jspwiki;
 
 import java.io.ByteArrayInputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.Vector;
 import org.apache.log4j.Category;
 import org.xml.sax.Attributes;
@@ -424,7 +425,11 @@ public class Html2WikiXmlTransformer extends DefaultHandler {
      *
      */
     private void setResultInputStream() {
-        this.byteArrayInputStream = new ByteArrayInputStream(html2xml.toString().getBytes());
+        try {
+            this.byteArrayInputStream = new ByteArrayInputStream(html2xml.toString().getBytes(WikiParser.DEFAULT_ENCODING));
+        } catch (UnsupportedEncodingException e) {
+            log.error(e, e);
+        }
     }
  
     /**

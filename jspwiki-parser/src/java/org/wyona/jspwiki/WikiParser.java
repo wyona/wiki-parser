@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.StringReader;
 import java.util.List;
 import java.util.Properties;
 import java.util.Vector;
@@ -32,6 +33,8 @@ import com.ecyrd.jspwiki.WikiPage;
 public class WikiParser extends org.wyona.wikiparser.WikiParser {
     private static Category log = Category.getInstance(WikiParser.class);
     
+    public static final String DEFAULT_ENCODING = "utf-8";
+    
     private InputStream inputStream = null;
     private Properties properties = null;
     private Element bodyElement = null; 
@@ -55,7 +58,7 @@ public class WikiParser extends org.wyona.wikiparser.WikiParser {
             WikiParser wikiParser = new WikiParser();
             wikiParser.parse(fstream);
             InputStream is = wikiParser.getInputStream();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is, DEFAULT_ENCODING));
             String line;
             while ((line = reader.readLine()) != null) {
                 System.out.println(line);
@@ -73,7 +76,7 @@ public class WikiParser extends org.wyona.wikiparser.WikiParser {
     public void parse(InputStream inputStream) {
         try {
             loadProperties();
-            InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+            InputStreamReader inputStreamReader = new InputStreamReader(inputStream, DEFAULT_ENCODING);
             
             WikiEngine engine = new WikiEngine(properties);
             WikiPage page = new WikiPage(engine, "PAGE");
@@ -97,9 +100,8 @@ public class WikiParser extends org.wyona.wikiparser.WikiParser {
             log.debug(createdHtml.toString());
             log.debug("####################################");
             
-            ByteArrayInputStream inStream = new ByteArrayInputStream(createdHtml.toString().getBytes());
             SAXBuilder builder = new SAXBuilder();
-            Document doc = builder.build(inStream);
+            Document doc = builder.build(new StringReader(createdHtml.toString()));
             Element root = doc.getRootElement();
             bodyElement = root.getChild("body");
             List listRootElements = bodyElement.getChildren();
@@ -117,7 +119,7 @@ public class WikiParser extends org.wyona.wikiparser.WikiParser {
             log.debug("####################################");
             Html2WikiXmlTransformer html2WikiXml = new Html2WikiXmlTransformer();
             SAXParser saxParser = SAXParserFactory.newInstance().newSAXParser();
-            saxParser.parse(new java.io.ByteArrayInputStream(modifiedHtml.getBytes("UTF-8")), html2WikiXml);
+            saxParser.parse(new java.io.ByteArrayInputStream(modifiedHtml.getBytes(DEFAULT_ENCODING)), html2WikiXml);
             setResultAsInputStream(html2WikiXml.getInputStream());
         } catch(Exception e) {
             e.printStackTrace();
