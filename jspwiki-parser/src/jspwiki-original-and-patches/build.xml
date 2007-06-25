@@ -36,7 +36,7 @@
   <target name="clean-up" depends="jar">
     <move file="./JSPWiki-patched-${version}.jar" tofile="${maven2.repository}/com-ecyrd-jspwiki/JSPWiki-patched/2.4.71/JSPWiki-patched-${version}.jar"/>
     <echo>IMPORTANT: update the maven repository server as well ;)</echo>
-    <exec dir="." executable="svn">
+    <exec dir="JSPWiki-2.4.71" executable="svn">
       <arg line="revert -R ."/>
     </exec>
   </target>
