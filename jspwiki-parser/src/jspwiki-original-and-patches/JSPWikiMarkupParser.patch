@@ -1,6 +1,6 @@
 Index: JSPWiki-2.4.71/src/com/ecyrd/jspwiki/parser/JSPWikiMarkupParser.java
 ===================================================================
---- JSPWiki-2.4.71/src/com/ecyrd/jspwiki/parser/JSPWikiMarkupParser.java	(revision 24879)
+--- JSPWiki-2.4.71/src/com/ecyrd/jspwiki/parser/JSPWikiMarkupParser.java	(revision 25385)
 +++ JSPWiki-2.4.71/src/com/ecyrd/jspwiki/parser/JSPWikiMarkupParser.java	(working copy)
 @@ -413,8 +413,12 @@
  
@@ -26,12 +26,21 @@ Index: JSPWiki-2.4.71/src/com/ecyrd/jspwiki/parser/JSPWikiMarkupParser.java
                  }
              }
              else if( (hashMark = reallink.indexOf('#')) != -1 )
-@@ -1552,7 +1556,7 @@
-             if( ch2 == '{' )
-             {
-                 m_isPre = true;
--                m_isEscaping = true;
-+                //m_isEscaping = true;
-                 m_isPreBlock = isBlock;
-                 
-                 if( isBlock )
+@@ -2297,7 +2301,7 @@
+                 {
+                     // DOS line feeds we ignore.
+                 }
+-                else if( ch == '<' )
++                /*else if( ch == '<' )
+                 {
+                     m_plainTextBuf.append( "&lt;" );
+                 }
+@@ -2308,7 +2312,7 @@
+                 else if( ch == '&' )
+                 {
+                     m_plainTextBuf.append( "&amp;" );
+-                }
++                }*/
+                 else if( ch == '~' )
+                 {
+                     String braces = readWhile("}");
