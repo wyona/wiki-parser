@@ -49,8 +49,8 @@
 
       <dependency groupId="apache-org-lucene" artifactId="lucene-highlighter"
                   version="1.x"/>
-      <dependency groupId="com-ecyrd-jspwiki" artifactId="jspwiki-parser"
-                  version="2.4.71"/>
+      <dependency groupId="com-ecyrd-jspwiki" artifactId="JSPWiki-patched"
+                  version="2.4.71-r25408"/>
       <dependency groupId="com-ecyrd-jspwiki" artifactId="jspwiki-parser-test"
                   version="2.4.71"/>
       <dependency groupId="apache-org-commons" artifactId="jrcs-diff"
