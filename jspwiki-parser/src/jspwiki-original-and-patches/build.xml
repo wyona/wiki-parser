@@ -1,9 +1,13 @@
-<project name="JSPWikiParser" default="clean-up" basedir=".">
+<project name="JSPWikiParser" default="clean-up" basedir="." xmlns:artifact="antlib:org.apache.maven.artifact.ant">
 
   <property file="local.build.properties"/>
   <property file="build.properties"/>  
   <property name="version" value="2.4.71"/>
-  <property name="classes.dir" value="classes"/>
+  <property name="classes.dir" value="${build.dir}/classes"/>
+  <property name="lib.dir" value="${build.dir}/lib"/>
+
+  <artifact:remoteRepository id="wyona.remote.repository" url="http://www.wyona.org/maven2/"/>
+
   <property name="patch.dir" value="JSPWiki-${version}/src/com/ecyrd/jspwiki"/>
 
   <target name="patch">
@@ -17,6 +21,7 @@
   </target>
 
   <target name="compile" depends="patch">
+    <mkdir dir="${classes.dir}"/>
     <path id="classpath">
       <fileset dir="JSPWiki-${version}/lib">
         <include name="*.jar"/>
@@ -28,16 +33,31 @@
     </javac>
   </target>
 
-  <target name="jar" depends="compile">
-    <jar destfile="./JSPWiki-patched-${version}.jar" basedir="${classes.dir}"/>
+  <target name="jar" description="Build jar file" depends="compile">
+    <mkdir dir="${lib.dir}"/>
+    <jar destfile="${lib.dir}/JSPWiki-patched-${jspwiki-parser.version}-r${subversion.revision}.jar" basedir="${classes.dir}"/>
     <delete dir="${classes.dir}"/>
   </target>
 
-  <target name="clean-up" depends="jar">
-    <move file="./JSPWiki-patched-${version}.jar" tofile="${maven2.repository}/com-ecyrd-jspwiki/JSPWiki-patched/2.4.71/JSPWiki-patched-${version}.jar"/>
-    <echo>IMPORTANT: update the maven repository server as well ;)</echo>
+  <target name="clean-up">
+    <!-- <move file="./JSPWiki-patched-${version}.jar" tofile="${maven2.repository}/com-ecyrd-jspwiki/JSPWiki-patched/2.4.71/JSPWiki-patched-${version}.jar"/> -->
+    <!-- <echo>IMPORTANT: update the maven repository server as well ;)</echo> -->
     <exec dir="JSPWiki-2.4.71" executable="svn">
       <arg line="revert -R ."/>
     </exec>
   </target>
+
+  <target name="install-jar" description="Place jar into local maven repository" depends="jar">
+    <copy file="pom.xml" todir="${lib.dir}" overwrite="true"/>
+    <replace file="${lib.dir}/pom.xml" value="${jspwiki-parser.version}-r${subversion.revision}">
+      <replacetoken>@VERSION@</replacetoken>
+    </replace>
+
+    <artifact:pom id="maven.project" file="${lib.dir}/pom.xml"/>
+
+    <artifact:install file="${lib.dir}/JSPWiki-patched-${jspwiki-parser.version}-r${subversion.revision}.jar">
+      <pom refid="maven.project"/>
+    </artifact:install>
+  </target>
+
 </project>
